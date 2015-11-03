@@ -1,0 +1,19 @@
+{
+  "name": "picappa",
+  "description": "media management app",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.5",
+    "react": "~0.14.1"
+  }
+}

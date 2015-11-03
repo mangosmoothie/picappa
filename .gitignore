@@ -1,0 +1,10 @@
+*.log
+*.sqlite
+node_modules/
+*.iml
+__pycache__/
+*.py[cod]
+*$py.class
+mediastore/*
+app/static/bower_components/
+.idea/
