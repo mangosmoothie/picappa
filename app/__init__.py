@@ -13,8 +13,8 @@ def create_app(config_name):
 
     db.init_app(app)
 
-    Popen(['python', app.config['FTP_SERVER'], '-P', app.config['FTP_PORT'], '-m', app.config['LOCAL_MEDIASTORE'], '-l',
-           app.config['FTP_LOG']])
+    # Popen(['python', app.config['FTP_SERVER'], '-P', app.config['FTP_PORT'], '-m', app.config['LOCAL_MEDIASTORE'], '-l',
+    #        app.config['FTP_LOG']])
 
     from .main import main as main_blueprint
 

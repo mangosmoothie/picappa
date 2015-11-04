@@ -6,5 +6,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 mediastore/*
+landingzone/*
 app/static/bower_components/
 .idea/

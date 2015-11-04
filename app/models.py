@@ -119,7 +119,7 @@ class MediaItemMediaStore(db.Model):
 
 
 def get_media_type(filename):
-    ext = os.path.splitext(filename)
+    _, ext = os.path.splitext(filename)
     if ext in ['.img', '.jpg', '.gif', '.jpeg', '.png']:
         return MediaType.picture
     elif ext in ['.mov', '.mpg', '.mp4', '.mpeg']:

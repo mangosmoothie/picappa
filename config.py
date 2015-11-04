@@ -1,4 +1,5 @@
 import os
+import logging
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -8,7 +9,8 @@ class Config:
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    LOCAL_MEDIASTORE = os.path.join(basedir, 'mediastore')
+    LOGGING_LEVEL = logging.DEBUG
+    LOCAL_MEDIASTORE_DESIGNATOR = 'local-primary'
     FTP_SERVER = os.path.join(basedir, 'app', 'ftp.py')
     FTP_PORT = '2121'
     FTP_LOG = os.path.join(basedir, 'logs', 'ftp.log')
