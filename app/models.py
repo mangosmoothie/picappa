@@ -32,6 +32,7 @@ class MediaItem(db.Model):
     media_type_cd = db.Column(db.Integer, nullable=False)
     thumbnail_id = db.Column(db.Integer, db.ForeignKey('mediaitem.id'), nullable=True)
     status_cd = db.Column(db.String(10), nullable=False, default='new')
+    file_size = db.Column(db.BigInteger, nullable=True)
 
     thumbnail = db.relationship('MediaItem', cascade='all, delete-orphan')
     tags = db.relationship('MediaItemTag', cascade='all, delete-orphan', backref='mediaitem')
@@ -57,7 +58,7 @@ class MediaItem(db.Model):
         self.media_type_cd = get_media_type(filepath).value
 
     def __repr__(self):
-        return 'MediaItem(%r, %r, %r)' % (self.id, self.media_type.name if self.media_type else 'Undefined', self.name)
+        return 'MediaItem(%r, %r, %r)' % (self.id, str(self.media_type_cd), self.name)
 
 
 class Tag(db.Model):
