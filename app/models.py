@@ -19,6 +19,13 @@ class Status(Enum):
     trash = 300
 
 
+class MediaItemMediaStoreDesig(Enum):
+    general = 000
+    source = 100
+    primary = 200
+    backup = 300
+
+
 class MediaItem(db.Model):
     __tablename__ = 'mediaitem'
 
@@ -33,6 +40,7 @@ class MediaItem(db.Model):
     thumbnail_id = db.Column(db.Integer, db.ForeignKey('mediaitem.id'), nullable=True)
     status_cd = db.Column(db.String(10), nullable=False, default='new')
     file_size = db.Column(db.BigInteger, nullable=True)
+    hash_cd = db.Column(db.String(32), nullable=True)
 
     thumbnail = db.relationship('MediaItem', cascade='all, delete-orphan')
     tags = db.relationship('MediaItemTag', cascade='all, delete-orphan', backref='mediaitem')
@@ -112,6 +120,7 @@ class MediaItemMediaStore(db.Model):
     mediaitem_id = db.Column(db.Integer, db.ForeignKey('mediaitem.id'), primary_key=True)
     mediastore_id = db.Column(db.Integer, db.ForeignKey('mediastore.id'), primary_key=True)
     path = db.Column(db.String(500), nullable=False)
+    designation_cd = db.Column(db.Integer, nullable=False, default=000)
 
     def __init__(self, mediaitem, mediastore, path):
         self.mediaitem_id = mediaitem.id
