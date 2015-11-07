@@ -1,6 +1,7 @@
 import sys
 import os
 import logging
+import requests
 from getopt import getopt, GetoptError
 from pyftpdlib.authorizers import DummyAuthorizer
 from pyftpdlib.handlers import FTPHandler
@@ -23,7 +24,11 @@ def print_usage():
 
 class PicappaFTPHandler(FTPHandler):
     def on_file_received(self, file):
-        logging.log(logging.INFO, 'FILE HAS BEEN RECEIVED -- ' + str(file))
+        file_metadata = {'filename': file, 'mediastore_designator': 'ftp-bulk', 'process-duplicates': 'false'}
+        resp = requests.post('http://localhost:5000/api/process-transferred-media', json=file_metadata)
+        if resp.status_code > 299:
+            logging.log(logging.ERROR,
+                        'ERROR WHILE TRANSFERRING FILE: ' + file + ' RECEIVED RESPONSE FROM PICAPPA: ' + str(resp))
 
     def on_incomplete_file_received(self, file):
         os.remove(file)

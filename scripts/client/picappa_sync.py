@@ -1,4 +1,5 @@
 import os
+from ftplib import FTP
 import json
 from socket import getfqdn
 import hashlib
@@ -22,6 +23,17 @@ def update_status_file():
                 media_deets = {'filepath': filepath, 'filesize': os.stat(filepath).st_size, 'hash_cd': hashcd}
                 data['transferred_media'][hashcd] = media_deets
                 to_transfer.append(media_deets)
+
+    ftp = FTP()
+    ftp.connect(host='localhost', port=2121)
+    ftp.login()
+    for t in to_transfer:
+        print('transferring file: ' + t['filepath'])
+        f = open(t['filepath'], 'rb')
+        ftp.storbinary('STOR ' + os.path.basename(t['filepath']), f)
+        f.close()
+    ftp.close()
+
     with open('.picappasync', 'w') as outfile:
         json.dump(data, outfile)
 

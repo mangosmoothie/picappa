@@ -1,13 +1,13 @@
-"""initial
+"""empty message
 
-Revision ID: 4848557bc00
+Revision ID: 246b03111b2
 Revises: None
-Create Date: 2015-11-02 22:09:10.469914
+Create Date: 2015-11-06 22:33:43.966168
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '4848557bc00'
+revision = '246b03111b2'
 down_revision = None
 
 from alembic import op
@@ -27,6 +27,8 @@ def upgrade():
     sa.Column('media_type_cd', sa.Integer(), nullable=False),
     sa.Column('thumbnail_id', sa.Integer(), nullable=True),
     sa.Column('status_cd', sa.String(length=10), nullable=False),
+    sa.Column('file_size', sa.BigInteger(), nullable=True),
+    sa.Column('hash_cd', sa.String(length=32), nullable=True),
     sa.ForeignKeyConstraint(['thumbnail_id'], ['mediaitem.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -49,6 +51,7 @@ def upgrade():
     sa.Column('mediaitem_id', sa.Integer(), nullable=False),
     sa.Column('mediastore_id', sa.Integer(), nullable=False),
     sa.Column('path', sa.String(length=500), nullable=False),
+    sa.Column('designation_cd', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['mediaitem_id'], ['mediaitem.id'], ),
     sa.ForeignKeyConstraint(['mediastore_id'], ['mediastore.id'], ),
     sa.PrimaryKeyConstraint('mediaitem_id', 'mediastore_id')

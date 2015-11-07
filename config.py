@@ -14,6 +14,8 @@ class Config:
     FTP_SERVER = os.path.join(basedir, 'app', 'ftp.py')
     FTP_PORT = '2121'
     FTP_LOG = os.path.join(basedir, 'logs', 'ftp.log')
+    # FTP_LANDING_ZONE = os.path.abspath(os.path.join(basedir, 'landingzone/'))
+    FTP_LANDING_ZONE = '/Users/nlloyd/projects/picappa/landingzone/'
 
     @staticmethod
     def init_app(app):

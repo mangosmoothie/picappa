@@ -40,7 +40,7 @@ class MediaItem(db.Model):
     thumbnail_id = db.Column(db.Integer, db.ForeignKey('mediaitem.id'), nullable=True)
     status_cd = db.Column(db.String(10), nullable=False, default='new')
     file_size = db.Column(db.BigInteger, nullable=True)
-    hash_cd = db.Column(db.String(32), nullable=True)
+    hash_cd = db.Column(db.String(32), nullable=False)
 
     thumbnail = db.relationship('MediaItem', cascade='all, delete-orphan')
     tags = db.relationship('MediaItemTag', cascade='all, delete-orphan', backref='mediaitem')
@@ -48,12 +48,13 @@ class MediaItem(db.Model):
 
 #    media_type = MediaType(self.media_type_cd) if self.media_type_cd else None
 
-    def __init__(self, filepath, name=None, status=Status.new, description=None, origin_date=datetime.utcnow()):
+    def __init__(self, filepath, hash_cd, name=None, status=Status.new, description=None, origin_date=datetime.utcnow()):
         self.name = name
         self.description = description
         self.origin_date = origin_date
         self.status_cd = status.value
         self.original_filename = os.path.basename(filepath)
+        self.hash_cd = hash_cd
 
         if name is None:
             self.name = os.path.basename(filepath)
