@@ -107,9 +107,10 @@ class MediaStore(db.Model):
     designator = db.Column(db.String(55), nullable=False, unique=True)
     base_dir = db.Column(db.String(500), nullable=False)
 
-    def __init__(self, name, designator):
+    def __init__(self, name, designator, base_dir):
         self.name = name
         self.designator = designator
+        self.base_dir = base_dir
 
     def __repr__(self):
         return 'MediaStore(%r)' % self.name
