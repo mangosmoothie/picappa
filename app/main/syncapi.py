@@ -4,7 +4,8 @@ import logging
 from flask import request, Response, current_app, jsonify
 from ..models import MediaItem, Status
 from ..syncservices import get_mediastore, create_mediaitem, transfer_file, extract_and_attach_metadata, \
-    search_for_and_mark_duplicate_mediaitem, remove_file, remove_duplicate_mediaitem_hashes, generate_hash_filepath
+    search_for_and_mark_duplicate_mediaitem, remove_file, remove_duplicate_mediaitem_hashes, generate_hash_filepath, \
+    get_pics
 
 
 @main.route('/api/process-transferred-media', methods=['POST'])
@@ -20,9 +21,8 @@ def process_transferred_media():
     search_for_and_mark_duplicate_mediaitem(mi)
     if process_dupes or not mi.status_cd == Status.new_dupe.value:
         extract_and_attach_metadata(mi, os.path.join(curr_ms.base_dir, curr_filename))
-        mi, ms = create_mediaitem(mi, ms)
-        new_filename = str(mi.id) + str(os.path.splitext(mi.original_filename)[1])
-        new_filepath = transfer_file(curr_ms, curr_filename, ms, new_filename)
+        mi, ms, mi_ms = create_mediaitem(mi, ms)
+        new_filepath = transfer_file(curr_ms, curr_filename, mi_ms)
         logging.log(logging.INFO, 'successfully transferred file to: ' + new_filepath)
     else:
         remove_file(curr_ms, curr_filename)
@@ -30,8 +30,16 @@ def process_transferred_media():
     return Response(status=200)
 
 
+@main.route('/api/pictures', methods=['GET'])
+def get_pictures():
+    pics = get_pics()
+    logging.log(logging.INFO, 'got pics: ' + str(pics))
+    return jsonify({'pictures': [pic.to_json() for pic in pics]})
+
+
 @main.route('/api/filter-existing-hashes', methods=['POST'])
 def filter_existing_hashes():
     content = request.get_json()
     hashes = remove_duplicate_mediaitem_hashes(content['hash_codes'])
     return jsonify(hashes)
+

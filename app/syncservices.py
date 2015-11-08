@@ -6,7 +6,8 @@ import hashlib
 import exifread
 from shutil import move
 from . import db
-from .models import MediaItem, MediaItemMediaStore, MediaType, MediaStore, Status
+from .models import MediaItem, MediaItemMediaStore, MediaType, MediaStore, Status, local_mediastore_designators
+from sqlalchemy import desc
 
 
 def get_mediastore(designator):
@@ -14,11 +15,13 @@ def get_mediastore(designator):
 
 
 def create_mediaitem(mediaitem, mediastore):
-    mi_ms = MediaItemMediaStore(mediaitem, mediastore, make_path(mediastore, mediaitem))
-    mediaitem.mediaitem_mediastores.append(mi_ms)
     db.session.add(mediaitem)
+    db.session.flush()
+    mi_ms = MediaItemMediaStore(mediaitem, mediastore)
+    mediaitem.mediaitem_mediastores.append(mi_ms)
+    db.session.add(mi_ms)
     db.session.commit()
-    return mediaitem, mediastore
+    return mediaitem, mediastore, mi_ms
 
 
 def search_for_and_mark_duplicate_mediaitem(mediaitem):
@@ -27,23 +30,17 @@ def search_for_and_mark_duplicate_mediaitem(mediaitem):
         mediaitem.status_cd = Status.new_dupe.value
 
 
-def make_path(mediastore, mediaitem):
-    if mediastore.designator in local_mediastore_designators():
-        return os.path.join(mediastore.base_dir,
-                            str(mediaitem.id) + str(os.path.splitext(mediaitem.original_filename)[1]))
-    raise NotImplementedError('not setup to make path for ' + str(mediastore))
-
-
-def transfer_file(src_mediastore, src_filename, dest_mediastore, dest_filename):
-    if src_mediastore.designator in local_mediastore_designators() and dest_mediastore.designator in local_mediastore_designators():
-        dest_filepath = os.path.join(dest_mediastore.base_dir, dest_filename)
-        move(os.path.join(src_mediastore.base_dir, src_filename), dest_filepath)
+def transfer_file(src_mediastore, src_filename, dest_mediaitem_mediastore):
+    if src_mediastore.designator in local_mediastore_designators() and \
+                dest_mediaitem_mediastore.mediastore.designator in local_mediastore_designators():
+        move(os.path.join(src_mediastore.base_dir, src_filename), dest_mediaitem_mediastore.path)
         logging.log(logging.INFO,
-                    'file: ' + os.path.join(src_mediastore.base_dir, src_filename) + ' transferred to ' + dest_filepath)
-        return dest_filepath
+                    'file: ' + os.path.join(src_mediastore.base_dir,
+                                            src_filename) + ' transferred to ' + dest_mediaitem_mediastore.path)
+        return dest_mediaitem_mediastore.path
     raise NotImplementedError(
         'unable to transfer between these mediastores: src={0} dest={1}'.format(str(src_mediastore),
-                                                                                str(dest_mediastore)))
+                                                                                str(dest_mediaitem_mediastore)))
 
 
 def extract_and_attach_metadata(mediaitem, filepath):
@@ -109,5 +106,8 @@ def generate_hash_file(file):
     return hashlib.md5(file.read()).hexdigest()
 
 
-def local_mediastore_designators():
-    return ['local-primary', 'ftp-bulk']
+def get_pics(start_num=None, end_num=None):
+    if start_num is None and end_num is None:
+        return MediaItem.query.order_by(desc(MediaItem.modified_date)).all()
+    else:
+        raise NotImplementedError('paging has not been implemented yet')

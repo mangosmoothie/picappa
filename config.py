@@ -9,6 +9,7 @@ class Config:
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    BASE_DIR = basedir
     LOGGING_LEVEL = logging.DEBUG
     LOCAL_MEDIASTORE_DESIGNATOR = 'local-primary'
     FTP_SERVER = os.path.join(basedir, 'app', 'ftp.py')

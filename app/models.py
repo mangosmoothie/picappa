@@ -44,11 +44,12 @@ class MediaItem(db.Model):
 
     thumbnail = db.relationship('MediaItem', cascade='all, delete-orphan')
     tags = db.relationship('MediaItemTag', cascade='all, delete-orphan', backref='mediaitem')
-    mediaitem_mediastores = db.relationship('MediaItemMediaStore', cascade='all, delete-orphan')
+    mediaitem_mediastores = db.relationship('MediaItemMediaStore', cascade='all, delete-orphan', backref='mediaitem')
 
-#    media_type = MediaType(self.media_type_cd) if self.media_type_cd else None
+    #    media_type = MediaType(self.media_type_cd) if self.media_type_cd else None
 
-    def __init__(self, filepath, hash_cd, name=None, status=Status.new, description=None, origin_date=datetime.utcnow()):
+    def __init__(self, filepath, hash_cd, name=None, status=Status.new, description=None,
+                 origin_date=datetime.utcnow()):
         self.name = name
         self.description = description
         self.origin_date = origin_date
@@ -65,6 +66,17 @@ class MediaItem(db.Model):
             self.description = description
 
         self.media_type_cd = get_media_type(filepath).value
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'origin_date': self.origin_date,
+            'status_cd': self.status_cd,
+            'original_filename': self.original_filename,
+            'local_path': [x.path for x in self.mediaitem_mediastores if x.designation_cd == 000][0]
+        }
 
     def __repr__(self):
         return 'MediaItem(%r, %r, %r)' % (self.id, str(self.media_type_cd), self.name)
@@ -124,10 +136,19 @@ class MediaItemMediaStore(db.Model):
     path = db.Column(db.String(500), nullable=False)
     designation_cd = db.Column(db.Integer, nullable=False, default=000)
 
-    def __init__(self, mediaitem, mediastore, path):
+    mediastore = db.relationship('MediaStore')
+
+    def __init__(self, mediaitem, mediastore):
         self.mediaitem_id = mediaitem.id
         self.mediastore_id = mediastore.id
-        self.path = path
+        self.path = self.make_path(mediastore, mediaitem)
+
+    @staticmethod
+    def make_path(mediastore, mediaitem):
+        if mediastore.designator in local_mediastore_designators():
+            return os.path.join(mediastore.base_dir,
+                                str(mediaitem.id) + str(os.path.splitext(mediaitem.original_filename)[1]))
+        raise NotImplementedError('not setup to make path for ' + str(mediastore))
 
 
 def get_media_type(filename):
@@ -138,3 +159,7 @@ def get_media_type(filename):
         return MediaType.video
     else:
         return MediaType.unknown
+
+
+def local_mediastore_designators():
+    return ['local-primary', 'ftp-bulk']
