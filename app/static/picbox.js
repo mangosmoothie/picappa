@@ -1,3 +1,27 @@
+var PictureDisplay = React.createClass({
+    getInitialState: function(){
+        return {
+            columns: 4,
+            columnWidth: "25%"
+        };
+    },
+    onColumnsChanged: function() {
+        this.setState({
+            columnWidth: Math.floor(100 / parseInt(this.refs.column.value)) + "%",
+            columns: this.refs.column.value
+        })
+    },
+    render: function() {
+        console.log('columns: ' + this.state.columns);
+        return (
+            <div className="pictureDisplay">
+                <input type="range" min="1" max="10" value={this.state.columns} onChange={this.onColumnsChanged} ref="column" style={{width: "25%"}}/>
+                <PictureBox url={this.props.url} columnWidth={this.state.columnWidth} />
+            </div>
+        );
+    }
+});
+
 var PictureBox = React.createClass({
     loadPicturesFromServer: function() {
         $.ajax({
@@ -13,7 +37,9 @@ var PictureBox = React.createClass({
         });
     },
     getInitialState: function() {
-        return {data: {"pictures":[]}};
+        return {
+            data: {"pictures":[]}
+        };
     },
     componentDidMount: function() {
         this.loadPicturesFromServer();
@@ -22,7 +48,7 @@ var PictureBox = React.createClass({
         return (
             <div className="pictureBox">
                 <h1>Pictures</h1>
-                <PictureList data={this.state.data} />
+                <PictureList columnWidth={this.props.columnWidth} data={this.state.data} />
             </div>
         );
     }
@@ -30,11 +56,10 @@ var PictureBox = React.createClass({
 
 var PictureList = React.createClass({
     render: function() {
+        var columnWidth = this.props.columnWidth;
         var pictureNodes = this.props.data.pictures.map(function (picture) {
             return (
-                <Picture name={picture.name} picurl={picture.url} key={picture.id} width="25%">
-                    //put the pic and stuff here
-                </Picture>
+                <Picture name={picture.name} picurl={picture.url} key={picture.id} width={columnWidth} />
             );
         });
         return (
@@ -60,7 +85,7 @@ var Picture = React.createClass({
         return (
             <div className="picContainer" style={styles.picContainer}>
                 {this.props.name}
-                <a href={this.props.picurl}>
+                <a href={this.props.picurl} >
                     <img src={this.props.picurl} className="img-responsive"  />
                 </a>
             </div>
@@ -69,6 +94,6 @@ var Picture = React.createClass({
 });
 
 ReactDOM.render(
-    <PictureBox url="/api/pictures" />,
+    <PictureDisplay url="/api/pictures" />,
     document.getElementById('content')
 );
