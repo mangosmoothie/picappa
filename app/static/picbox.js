@@ -32,7 +32,7 @@ var PictureList = React.createClass({
     render: function() {
         var pictureNodes = this.props.data.pictures.map(function (picture) {
             return (
-                <Picture name={picture.name} localpath={picture.local_path} key={picture.id}>
+                <Picture name={picture.name} picurl={picture.url} key={picture.id} width="25%">
                     //put the pic and stuff here
                 </Picture>
             );
@@ -47,12 +47,22 @@ var PictureList = React.createClass({
 
 var Picture = React.createClass({
     render: function() {
+        var styles = {
+            picContainer: {
+                display: "inline-block",
+                width: this.props.width,
+                padding: "5px"
+            },
+            pic: {
+                width: "100%"
+            }
+        };
         return (
-            <div className="picture">
-                <h3 className="pictureName">
-                    {this.props.name}
-                    <img src={this.props.localpath} className="img-responsive" />
-                </h3>
+            <div className="picContainer" style={styles.picContainer}>
+                {this.props.name}
+                <a href={this.props.picurl}>
+                    <img src={this.props.picurl} className="img-responsive"  />
+                </a>
             </div>
         );
     }

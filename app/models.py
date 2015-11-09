@@ -75,7 +75,7 @@ class MediaItem(db.Model):
             'origin_date': self.origin_date,
             'status_cd': self.status_cd,
             'original_filename': self.original_filename,
-            'local_path': [x.path for x in self.mediaitem_mediastores if x.designation_cd == 000][0]
+            'url': [x.path for x in self.mediaitem_mediastores if x.designation_cd == 000][0]
         }
 
     def __repr__(self):
