@@ -59,7 +59,7 @@ var PictureList = React.createClass({
         var columnWidth = this.props.columnWidth;
         var pictureNodes = this.props.data.pictures.map(function (picture) {
             return (
-                <Picture name={picture.name} picurl={picture.url} key={picture.id} width={columnWidth} />
+                <Picture name={picture.name} thumburl={picture.thumb_url} picurl={picture.url} key={picture.id} width={columnWidth} />
             );
         });
         return (
@@ -86,7 +86,7 @@ var Picture = React.createClass({
             <div className="picContainer" style={styles.picContainer}>
                 {this.props.name}
                 <a href={this.props.picurl} >
-                    <img src={this.props.picurl} className="img-responsive"  />
+                    <img src={this.props.thumburl} className="img-responsive"  />
                 </a>
             </div>
         );

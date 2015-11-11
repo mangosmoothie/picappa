@@ -9,3 +9,4 @@ mediastore/*
 landingzone/*
 app/static/bower_components/
 .idea/
+.DS_Store

@@ -16,7 +16,7 @@ def update_status_file():
         data['transferred_media'] = {}
     for subdir, dir, files in os.walk(os.getcwd()):
         for file in files:
-            if file == '.picappa':
+            if file[0] in ['.', '~']:
                 continue
             filepath = os.path.join(subdir, file)
             hashcd = hashlib.md5(open(filepath, 'rb').read()).hexdigest()

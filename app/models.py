@@ -42,30 +42,30 @@ class MediaItem(db.Model):
     file_size = db.Column(db.BigInteger, nullable=True)
     hash_cd = db.Column(db.String(32), nullable=False)
 
-    thumbnail = db.relationship('MediaItem', cascade='all, delete-orphan')
+    thumbnail = db.relationship('MediaItem', remote_side=[id])
     tags = db.relationship('MediaItemTag', cascade='all, delete-orphan', backref='mediaitem')
     mediaitem_mediastores = db.relationship('MediaItemMediaStore', cascade='all, delete-orphan', backref='mediaitem')
 
     #    media_type = MediaType(self.media_type_cd) if self.media_type_cd else None
 
     def __init__(self, filepath, hash_cd, name=None, status=Status.new, description=None,
-                 origin_date=datetime.utcnow()):
-        self.name = name
-        self.description = description
-        self.origin_date = origin_date
-        self.status_cd = status.value
-        self.original_filename = os.path.basename(filepath)
-        self.hash_cd = hash_cd
+                 origin_date=datetime.utcnow(), parent_mediaitem=None):
 
-        if name is None:
-            self.name = os.path.basename(filepath)
-        else:
-            self.name = name
-
-        if description is not None:
+        if parent_mediaitem is not None:
+            self.name = 'thumb_' + str(parent_mediaitem.id)
+            self.original_filename = parent_mediaitem.original_filename
+        elif filepath is not None and hash_cd is not None:
             self.description = description
+            self.origin_date = origin_date
+            self.original_filename = os.path.basename(filepath)
+            self.hash_cd = hash_cd
+        else:
+            raise NotImplementedError('unable to create mediaitem with given params')
 
+        self.name = os.path.basename(filepath) if name is None else name
+        self.description = description
         self.media_type_cd = get_media_type(filepath).value
+        self.status_cd = status.value
 
     def to_json(self):
         return {
@@ -75,7 +75,8 @@ class MediaItem(db.Model):
             'origin_date': self.origin_date,
             'status_cd': self.status_cd,
             'original_filename': self.original_filename,
-            'url': [x.path for x in self.mediaitem_mediastores if x.designation_cd == 000][0]
+            'url': [x.path for x in self.mediaitem_mediastores if x.designation_cd == 000][0],
+            'thumb_url': [x.path for x in self.thumbnail.mediaitem_mediastores if x.designation_cd == 000][0]
         }
 
     def __repr__(self):
@@ -138,10 +139,10 @@ class MediaItemMediaStore(db.Model):
 
     mediastore = db.relationship('MediaStore')
 
-    def __init__(self, mediaitem, mediastore):
+    def __init__(self, mediaitem, mediastore, path=None):
         self.mediaitem_id = mediaitem.id
         self.mediastore_id = mediastore.id
-        self.path = self.make_path(mediastore, mediaitem)
+        self.path = self.make_path(mediastore, mediaitem) if path is None else path
 
     @staticmethod
     def make_path(mediastore, mediaitem):

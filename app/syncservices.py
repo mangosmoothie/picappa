@@ -1,5 +1,6 @@
 import os.path
 import logging
+from PIL import Image
 from datetime import datetime
 from flask import current_app
 import hashlib
@@ -22,6 +23,20 @@ def create_mediaitem(mediaitem, mediastore):
     db.session.add(mi_ms)
     db.session.commit()
     return mediaitem, mediastore, mi_ms
+
+
+def create_thumbnail(parent_mediaitem, parent_mediaitem_mediastore, mediastore):
+    img = Image.open(parent_mediaitem_mediastore.path)
+    filename = str(parent_mediaitem.id)
+    img.thumbnail((300, 300))
+    filepath = os.path.join(mediastore.base_dir, 'thumbs', filename + '.png')
+    img.save(filepath, 'png')
+    thumb = MediaItem(filename, generate_hash_filepath(filepath))
+    parent_mediaitem.thumbnail = thumb
+    mi_ms = MediaItemMediaStore(thumb, mediastore, filepath)
+    thumb.mediaitem_mediastores.append(mi_ms)
+    db.session.add(thumb)
+    db.session.commit()
 
 
 def search_for_and_mark_duplicate_mediaitem(mediaitem):
@@ -108,6 +123,6 @@ def generate_hash_file(file):
 
 def get_pics(start_num=None, end_num=None):
     if start_num is None and end_num is None:
-        return MediaItem.query.order_by(desc(MediaItem.modified_date)).all()
+        return MediaItem.query.filter(MediaItem.thumbnail_id != None).order_by(desc(MediaItem.modified_date)).all()
     else:
         raise NotImplementedError('paging has not been implemented yet')

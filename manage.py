@@ -45,7 +45,7 @@ def resetdata():
     db.session.commit()
     remove_all_in_dir('mediastore/')
     remove_all_in_dir(current_app.config['FTP_LANDING_ZONE'])
-
+    os.mkdir('mediastore/thumbs')
 
 def remove_all_in_dir(directory):
     from shutil import rmtree
