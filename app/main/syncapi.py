@@ -5,7 +5,7 @@ from flask import request, Response, current_app, jsonify
 from ..models import MediaItem, Status
 from ..syncservices import get_mediastore, create_mediaitem, transfer_file, extract_and_attach_metadata, \
     search_for_and_mark_duplicate_mediaitem, remove_file, remove_duplicate_mediaitem_hashes, generate_hash_filepath, \
-    get_pics, create_thumbnail
+    get_pics, create_thumbnail, get_new_tag
 
 
 @main.route('/api/process-transferred-media', methods=['POST'])
@@ -21,6 +21,7 @@ def process_transferred_media():
     search_for_and_mark_duplicate_mediaitem(mi)
     if process_dupes or not mi.status_cd == Status.new_dupe.value:
         extract_and_attach_metadata(mi, os.path.join(curr_ms.base_dir, curr_filename))
+        mi.tags.append(get_new_tag())
         mi, ms, mi_ms = create_mediaitem(mi, ms)
         new_filepath = transfer_file(curr_ms, curr_filename, mi_ms)
         create_thumbnail(mi, mi_ms, ms)

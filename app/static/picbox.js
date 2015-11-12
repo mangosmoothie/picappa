@@ -79,14 +79,15 @@ var Picture = React.createClass({
                 padding: "5px"
             },
             pic: {
-                width: "100%"
+                width: "100%",
+                align: "center"
             }
         };
         return (
             <div className="picContainer" style={styles.picContainer}>
                 {this.props.name}
                 <a href={this.props.picurl} >
-                    <img src={this.props.thumburl} className="img-responsive"  />
+                    <img src={this.props.thumburl} style={styles.pic} className="img-responsive"  />
                 </a>
             </div>
         );

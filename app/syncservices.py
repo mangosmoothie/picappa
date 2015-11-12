@@ -7,7 +7,7 @@ import hashlib
 import exifread
 from shutil import move
 from . import db
-from .models import MediaItem, MediaItemMediaStore, MediaType, MediaStore, Status, local_mediastore_designators
+from .models import MediaItem, MediaItemMediaStore, MediaType, MediaStore, Status, local_mediastore_designators, Tag
 from sqlalchemy import desc
 
 
@@ -126,3 +126,7 @@ def get_pics(start_num=None, end_num=None):
         return MediaItem.query.filter(MediaItem.thumbnail_id != None).order_by(desc(MediaItem.modified_date)).all()
     else:
         raise NotImplementedError('paging has not been implemented yet')
+
+
+def get_new_tag():
+    return Tag.query.filter(Tag.name == 'New').first()

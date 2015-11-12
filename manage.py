@@ -2,11 +2,11 @@
 import os
 import logging
 from app import create_app, db
-from app.models import MediaItem, Tag, MediaItemTag, MediaStore, MediaItemMediaStore
+from app.models import MediaItem, Tag, MediaStore, MediaItemMediaStore, mediaitem_tag_table
 from flask.ext.script import Manager, Shell, Server
 from flask.ext.migrate import Migrate, MigrateCommand, upgrade
 
-app = create_app(os.getenv('FLASK_CONFIG') or 'default', False)
+app = create_app(os.getenv('FLASK_CONFIG') or 'default', True)
 manager = Manager(app)
 migrate = Migrate(app, db)
 
@@ -14,7 +14,7 @@ logging.basicConfig(filename='logs/app.log', level=app.config['LOGGING_LEVEL'])
 
 
 def make_shell_context():
-    return dict(app=app, db=db, MediaItem=MediaItem, Tag=Tag, MediaItemTag=MediaItemTag, MediaStore=MediaStore, MediaItemMediaStore=MediaItemMediaStore)
+    return dict(app=app, db=db, MediaItem=MediaItem, Tag=Tag, MediaStore=MediaStore, MediaItemMediaStore=MediaItemMediaStore)
 
 
 manager.add_command("shell", Shell(make_context=make_shell_context))
@@ -38,10 +38,14 @@ def resetdata():
     for _, c in inspect.getmembers(app.models, lambda x: inspect.isclass(x)):
         if c.__dict__.get('__table__') is not None:
             c.query.delete()
+    db.session.commit()
+    db.engine.execute('DELETE FROM mediaitem_tag')
     local_mediastore = MediaStore('local-primary', 'local-primary', 'mediastore/')
     ftp_landingzone = MediaStore('ftp-bulk', 'ftp-bulk', current_app.config['FTP_LANDING_ZONE'])
+    new_tag = Tag('New')
     db.session.add(local_mediastore)
     db.session.add(ftp_landingzone)
+    db.session.add(new_tag)
     db.session.commit()
     remove_all_in_dir('mediastore/')
     remove_all_in_dir(current_app.config['FTP_LANDING_ZONE'])

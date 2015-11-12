@@ -43,7 +43,6 @@ class MediaItem(db.Model):
     hash_cd = db.Column(db.String(32), nullable=False)
 
     thumbnail = db.relationship('MediaItem', remote_side=[id])
-    tags = db.relationship('MediaItemTag', cascade='all, delete-orphan', backref='mediaitem')
     mediaitem_mediastores = db.relationship('MediaItemMediaStore', cascade='all, delete-orphan', backref='mediaitem')
 
     #    media_type = MediaType(self.media_type_cd) if self.media_type_cd else None
@@ -83,15 +82,20 @@ class MediaItem(db.Model):
         return 'MediaItem(%r, %r, %r)' % (self.id, str(self.media_type_cd), self.name)
 
 
+mediaitem_tag_table = db.Table('mediaitem_tag',
+                               db.Column('mediaitem_id', db.Integer, db.ForeignKey('mediaitem.id')),
+                               db.Column('tag_id', db.Integer, db.ForeignKey('tag.id')))
+
+
 class Tag(db.Model):
     __tablename__ = 'tag'
 
     id = db.Column(db.Integer, primary_key=True)
     parent_id = db.Column(db.Integer, db.ForeignKey('tag.id'), nullable=True)
-    name = db.Column(db.String(55), nullable=False)
+    name = db.Column(db.String(55), nullable=False, unique=True)
 
-    children = db.relationship('Tag', cascade='all', backref=db.backref('parent', remote_side='Tag.id'))
-    media_items = db.relationship('MediaItemTag', cascade='all, delete-orphan', backref='tag')
+    children = db.relationship('Tag', backref=db.backref('parent', remote_side=[id]))
+    media_items = db.relationship('MediaItem', secondary=mediaitem_tag_table, backref='tags')
 
     def __init__(self, name, parent=None):
         self.name = name
@@ -101,15 +105,15 @@ class Tag(db.Model):
         return 'Tag(%r, %r)' % (self.id, self.name)
 
 
-class MediaItemTag(db.Model):
-    __tablename__ = 'mediaitem_tag'
-
-    mediaitem_id = db.Column(db.Integer, db.ForeignKey('mediaitem.id'), primary_key=True)
-    tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'), primary_key=True)
-
-    def __init__(self, mediaitem, tag):
-        self.mediaitem_id = mediaitem.id
-        self.tag_id = tag.id
+# class MediaItemTag(db.Model):
+#     __tablename__ = 'mediaitem_tag'
+#
+#     mediaitem_id = db.Column(db.Integer, db.ForeignKey('mediaitem.id'), primary_key=True)
+#     tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'), primary_key=True)
+#
+#     def __init__(self, mediaitem, tag):
+#         self.mediaitem_id = mediaitem.id
+#         self.tag_id = tag.id
 
 
 class MediaStore(db.Model):
