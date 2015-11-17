@@ -12,7 +12,6 @@ var PictureDisplay = React.createClass({
         })
     },
     render: function() {
-        console.log('columns: ' + this.state.columns);
         return (
             <div className="pictureDisplay">
                 <input type="range" min="1" max="10" value={this.state.columns} onChange={this.onColumnsChanged} ref="column" style={{width: "25%"}}/>
@@ -58,8 +57,9 @@ var PictureList = React.createClass({
     render: function() {
         var columnWidth = this.props.columnWidth;
         var pictureNodes = this.props.data.pictures.map(function (picture) {
+            var editurl = "mediastore/" + picture.id + "?edit=true";
             return (
-                <Picture name={picture.name} thumburl={picture.thumb_url} picurl={picture.url} key={picture.id} width={columnWidth} />
+                <Picture name={picture.name} thumburl={picture.thumb_url} picurl={picture.url} key={picture.id} width={columnWidth} editurl={editurl}/>
             );
         });
         return (
@@ -81,6 +81,9 @@ var Picture = React.createClass({
             pic: {
                 width: "100%",
                 align: "center"
+            },
+            button: {
+                margin: "2.5px 0px 0px 0px"
             }
         };
         return (
@@ -89,6 +92,7 @@ var Picture = React.createClass({
                 <a href={this.props.picurl} >
                     <img src={this.props.thumburl} style={styles.pic} className="img-responsive"  />
                 </a>
+                <a href={this.props.editurl} className="btn btn-primary btn-xs" style={styles.button}>Edit</a>
             </div>
         );
     }

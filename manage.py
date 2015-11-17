@@ -2,11 +2,11 @@
 import os
 import logging
 from app import create_app, db
-from app.models import MediaItem, Tag, MediaStore, MediaItemMediaStore, mediaitem_tag_table
+from app.models import MediaItem, Tag, MediaStore, MediaItemMediaStore
 from flask.ext.script import Manager, Shell, Server
-from flask.ext.migrate import Migrate, MigrateCommand, upgrade
+from flask.ext.migrate import Migrate, MigrateCommand
 
-app = create_app(os.getenv('FLASK_CONFIG') or 'default', True)
+app = create_app(os.getenv('FLASK_CONFIG') or 'default', False)
 manager = Manager(app)
 migrate = Migrate(app, db)
 
@@ -29,6 +29,7 @@ def test():
     tests = unittest.TestLoader().discover('tests')
     unittest.TextTestRunner(verbosity=2).run(tests)
 
+
 @manager.command
 def resetdata():
     """Resets the database with base data"""
@@ -50,6 +51,7 @@ def resetdata():
     remove_all_in_dir('mediastore/')
     remove_all_in_dir(current_app.config['FTP_LANDING_ZONE'])
     os.mkdir('mediastore/thumbs')
+
 
 def remove_all_in_dir(directory):
     from shutil import rmtree

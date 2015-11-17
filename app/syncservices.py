@@ -130,3 +130,14 @@ def get_pics(start_num=None, end_num=None):
 
 def get_new_tag():
     return Tag.query.filter(Tag.name == 'New').first()
+
+
+def create_or_update(item):
+    db.session.add(item)
+    db.session.commit()
+
+
+def update_mediaitem(mediaitem):
+    # TODO: add checks and tag stuff for mediaitem update
+    create_or_update(mediaitem)
+    return mediaitem

@@ -72,8 +72,12 @@ class MediaItem(db.Model):
             'name': self.name,
             'description': self.description,
             'origin_date': self.origin_date,
+            'added_date': self.added_date,
+            'modified_date': self.modified_date,
             'status_cd': self.status_cd,
+            'media_type_cd': self.media_type_cd,
             'original_filename': self.original_filename,
+            'file_size': self.file_size,
             'url': [x.path for x in self.mediaitem_mediastores if x.designation_cd == 000][0],
             'thumb_url': [x.path for x in self.thumbnail.mediaitem_mediastores if x.designation_cd == 000][0]
         }

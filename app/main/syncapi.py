@@ -5,7 +5,7 @@ from flask import request, Response, current_app, jsonify
 from ..models import MediaItem, Status
 from ..syncservices import get_mediastore, create_mediaitem, transfer_file, extract_and_attach_metadata, \
     search_for_and_mark_duplicate_mediaitem, remove_file, remove_duplicate_mediaitem_hashes, generate_hash_filepath, \
-    get_pics, create_thumbnail, get_new_tag
+    get_pics, create_thumbnail, get_new_tag, update_mediaitem
 
 
 @main.route('/api/process-transferred-media', methods=['POST'])
@@ -30,6 +30,24 @@ def process_transferred_media():
         remove_file(curr_ms, curr_filename)
         logging.log(logging.INFO, 'duplicate file detected - file will not be processed: ' + curr_filename)
     return Response(status=200)
+
+
+@main.route('/api/mediaitem/<int:mediaitem_id>', methods=['GET', 'POST'])
+def handle_mediaitem(mediaitem_id):
+    if request.method == 'GET':
+        mi = MediaItem.query.get_or_404(mediaitem_id)
+        return jsonify(mi.to_json())
+
+    if request.method == 'POST':
+        if int(request.form['id']) != mediaitem_id:
+            return Response(status=500)
+        mi = MediaItem.query.get_or_404(mediaitem_id)
+        mi.name = request.form['name']
+        mi.description = request.form['description']
+        mi.media_type_cd = int(request.form['media_type_cd'])
+        mi.status_cd = int(request.form['status_cd'])
+        mi = update_mediaitem(mi)
+        return jsonify(mi.to_json())
 
 
 @main.route('/api/pictures', methods=['GET'])
