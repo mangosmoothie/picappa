@@ -2,7 +2,7 @@
 import os
 import logging
 from app import create_app, db
-from app.models import MediaItem, Tag, MediaStore, MediaItemMediaStore
+from app.models import MediaItem, Tag, MediaStore, MediaItemMediaStore, MediaType, Status
 from flask.ext.script import Manager, Shell, Server
 from flask.ext.migrate import Migrate, MigrateCommand
 
@@ -14,7 +14,7 @@ logging.basicConfig(filename='logs/app.log', level=app.config['LOGGING_LEVEL'])
 
 
 def make_shell_context():
-    return dict(app=app, db=db, MediaItem=MediaItem, Tag=Tag, MediaStore=MediaStore, MediaItemMediaStore=MediaItemMediaStore)
+    return dict(app=app, db=db, MediaItem=MediaItem, Tag=Tag, MediaStore=MediaStore, MediaItemMediaStore=MediaItemMediaStore, MediaType=MediaType, Status=Status)
 
 
 manager.add_command("shell", Shell(make_context=make_shell_context))

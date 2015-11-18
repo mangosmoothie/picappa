@@ -12,37 +12,68 @@ var MediaItemBox = React.createClass({
             }.bind(this)
         });
     },
+    loadSelections: function() {
+        $.ajax({
+            url: '/api/mediaitem-selections',
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+                this.setState({statuses: data['statuses'], mediaTypes: data['media_types']});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+    },
     handleMediaItemUpdate: function(mediaitem){
-        console.log('posting data to ' + this.props.url + this.state.mediaitem.id);
-        console.log(mediaitem)
         $.ajax({
             url: this.props.url + this.state.mediaitem.id,
             dataType: 'json',
             type: 'POST',
             data: mediaitem,
             success: function(data) {
-                this.setState({mediaitem: data});
+                this.setState({
+                    mediaitem: data
+                });
+                var alertBox = $('#alert');
+                alertBox.attr('class', 'alert alert-success');
+                alertBox.html('Update successful');
+                alertBox.fadeTo(2000, 500).slideUp(500, function(){
+                    alertBox.attr('class', 'invisible');
+                });
             }.bind(this),
             error: function(xhr, status, err) {
-                this.setState({mediaitem: mediaitem});
+                this.setState({
+                    mediaitem: mediaitem
+                });
+                var alertBox = $('#alert');
+                alertBox.attr('class', 'alert alert-danger');
+                alertBox.html('Update failed');
+                alertBox.fadeTo(2000, 500).slideUp(500, function(){
+                    alertBox.attr('class', 'invisible');
+                });
                 console.error(this.props.url + mediaitem.id, status, err.toString());
             }.bind(this)
         });
     },
     getInitialState: function() {
-        return {mediaitem: {}};
+        return {mediaitem: {}, statuses: [], mediaTypes: []};
     },
     componentDidMount: function() {
         var currentUrl = window.location.href;
         var mediaitem_id = currentUrl.substr(currentUrl.lastIndexOf('/') + 1).split('?')[0];
         this.loadMediaItem(mediaitem_id);
+        this.loadSelections();
     },
     render: function(){
         var thumburl = this.state.mediaitem.thumb_url ? "/" + this.state.mediaitem.thumb_url : null;
         return(
             <div className="mediaItemBox">
                 <PictureBox thumburl={thumburl} />
-                <MediaItemForm  mediaitem={this.state.mediaitem} onMediaItemUpdate={this.handleMediaItemUpdate} />
+                <div id="alert" className="hidden">
+                </div>
+                <MediaItemForm  mediaitem={this.state.mediaitem} statuses={this.state.statuses}
+                                mediaTypes={this.state.mediaTypes} onMediaItemUpdate={this.handleMediaItemUpdate} />
             </div>
         );
     }
@@ -50,7 +81,6 @@ var MediaItemBox = React.createClass({
 
 var MediaItemForm = React.createClass({
     handleSubmit: function(e) {
-        console.log('handle submit called')
         e.preventDefault();
         var name = this.refs.name.value.trim() || this.props.mediaitem.name;
         var desc = this.refs.desc.value.trim() || this.props.mediaitem.description;
@@ -60,9 +90,32 @@ var MediaItemForm = React.createClass({
             return;
         }
         this.props.onMediaItemUpdate({id: this.props.mediaitem.id, name: name, description: desc, media_type_cd: media_type_cd, status_cd: status_cd});
-        return;
     },
     render: function() {
+        var currStatusCode = this.props.mediaitem.status_cd;
+        var statusCdNodes = this.props.statuses.map(function(statusCode){
+            if(statusCode['status_cd'] == currStatusCode) {
+                return (
+                    <option value={statusCode['status_cd']} selected="selected">{statusCode['name']}</option>
+                );
+            } else {
+                return (
+                    <option value={statusCode['status_cd']}>{statusCode['name']}</option>
+                );
+            }
+        });
+        var currMediaTypeCode = this.props.mediaitem.media_type_cd;
+        var mediaTypeNodes = this.props.mediaTypes.map(function(mediaType){
+            if(mediaType['media_type_cd'] == currMediaTypeCode){
+                return (
+                    <option value={mediaType['media_type_cd']} selected="selected">{mediaType['name']}</option>
+                );
+            } else {
+                return (
+                    <option value={mediaType['media_type_cd']}>{mediaType['name']}</option>
+                );
+            }
+        });
         return (
             <div className="mediaitemUpdate">
                 <form className="form-horizontal" role="form" onSubmit={this.handleSubmit} >
@@ -105,13 +158,17 @@ var MediaItemForm = React.createClass({
                     <div className="form-group">
                         <label className="control-label col-sm-2" htmlFor="status_cd">Status Code:</label>
                         <div className="col-sm-10">
-                            <input type="text" className="form-control" id="status_cd" placeholder={this.props.mediaitem.status_cd} ref="status_cd" />
+                            <select className="form-control" ref="status_cd">
+                                {statusCdNodes}
+                            </select>
                         </div>
                     </div>
                     <div className="form-group">
                         <label className="control-label col-sm-2" htmlFor="media_type_cd">Media Type Code:</label>
                         <div className="col-sm-10">
-                            <input type="text" className="form-control" id="media_type_cd" placeholder={this.props.mediaitem.media_type_cd} ref="media_type_cd" />
+                            <select className="form-control" ref="media_type_cd">
+                                {mediaTypeNodes}
+                            </select>
                         </div>
                     </div>
                     <div className="form-group">
