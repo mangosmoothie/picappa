@@ -39,13 +39,12 @@ def handle_mediaitem(mediaitem_id):
         return jsonify(mi.to_json())
 
     if request.method == 'POST':
-        if int(request.form['id']) != mediaitem_id:
-            return Response(status=500)
         mi = MediaItem.query.get_or_404(mediaitem_id)
-        mi.name = request.form['name']
-        mi.description = request.form['description']
-        mi.media_type_cd = int(request.form['media_type_cd'])
-        mi.status_cd = int(request.form['status_cd'])
+        mi2 = request.get_json()
+        mi.name = mi2['name']
+        mi.description = mi2['description']
+        mi.media_type_cd = int(mi2['media_type_cd'])
+        mi.status_cd = int(mi2['status_cd'])
         mi = update_mediaitem(mi)
         return jsonify(mi.to_json())
 

@@ -2,21 +2,18 @@ function handleSumbitMediaItem() {
   var mi = buildMediaItem();
   
   $.ajax({
-    url: '/api/mediaitem/',
+    url: '/api/mediaitem/' + mi.id,
     type: 'POST',
     data: JSON.stringify(mi),
     contentType: 'application/json',
     success: function(data) {
       var msg = 'successfully submitted update.';
-      console.log(msg);
       popAlert(msg, 'SUCCESS');
       var returnUrl = getCookie("returnUrl");
       //redirect to cookie location
       if(returnUrl){
-        console.log('redirecting to ' + returnUrl);
         window.location = returnUrl;
       }else{
-        console.log('redirecting to root');
         window.location = "/";
       }
     }.bind(this),
@@ -34,12 +31,13 @@ function buildMediaItem() {
   var name = $('#name');
   mi.name = name.val() ? name.val() : name.attr('placeholder');
   var desc = $('#desc');
-  mi.desc = desc.val() ? desc.val() : desc.attr('placeholder');
+  mi.description = desc.val() ? desc.val() : desc.attr('placeholder');
   if (mi.desc == 'Description'){
     mi.desc = '';
   }
   mi.media_type_cd = $('#media_type_cd').val();
   mi.status_cd = $('#status_cd').val();
+  mi.id = mediaItemId;
   return mi;
 }
 
