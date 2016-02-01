@@ -37,6 +37,16 @@ def update_tag(tag_id):
     return Response(status=200)
 
 
+@main.route('/mediaitem/<int:mediaitem_id>', methods=['GET'])
+def get_mediaitem_form(mediaitem_id):
+    print('did the get')
+    return current_app.send_static_file('mi_edit.html')
+
+@main.route('/test/<path:path>', methods=['GET'])
+def get_test(path):
+    return current_app.send_static_file('mi_edit.html')
+
+
 # @main.route('/mediaitem/<int:mediaitem_id>', methods=['POST'])
 # def update_mediaitem(mediaitem_id):
 #     mediaitem = MediaItem.query.get_or_404(mediaitem_id)

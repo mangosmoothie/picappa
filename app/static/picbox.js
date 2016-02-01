@@ -57,7 +57,7 @@ var PictureList = React.createClass({
     render: function() {
         var columnWidth = this.props.columnWidth;
         var pictureNodes = this.props.data.pictures.map(function (picture) {
-            var editurl = "mediastore/" + picture.id + "?edit=true";
+            var editurl = "/mediaitem/" + picture.id;
             return (
                 <Picture name={picture.name} thumburl={picture.thumb_url} picurl={picture.url} key={picture.id} width={columnWidth} editurl={editurl}/>
             );
