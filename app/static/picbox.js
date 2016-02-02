@@ -71,31 +71,34 @@ var PictureList = React.createClass({
 });
 
 var Picture = React.createClass({
-    render: function() {
-        var styles = {
-            picContainer: {
-                display: "inline-block",
-                width: this.props.width,
-                padding: "5px"
-            },
-            pic: {
-                width: "100%",
-                align: "center"
-            },
-            button: {
-                margin: "2.5px 0px 0px 0px"
-            }
-        };
-        return (
-            <div className="picContainer" style={styles.picContainer}>
-                {this.props.name}
-                <a href={this.props.picurl} >
-                    <img src={this.props.thumburl} style={styles.pic} className="img-responsive"  />
-                </a>
-                <a href={this.props.editurl} className="btn btn-primary btn-xs" style={styles.button}>Edit</a>
-            </div>
-        );
+  getInitialState: function() {
+    return {
+      selected: false,
+      selectedClass: "img-responsive pic"
+    };
+  },
+  handleClick: function() {
+    if( this.state.selected){
+      this.setState({ selected: false, selectedClass: "img-responsive pic" });
+    } else {
+      this.setState({ selected: true, selectedClass: "img-responsive pic selectedItem" });
     }
+  },
+  render: function() {
+    var styles = {
+      container: {
+        width: this.props.width
+      }
+    };
+    return (
+        <div className="picContainer" style={styles.container}>
+            <a href="javascript:void(0);" onClick={ this.handleClick } >
+                <img src={this.props.thumburl} className={this.state.selectedClass} />
+            </a>
+            <a href={this.props.editurl} className="btn btn-primary btn-xs small-edit-button" style={styles.button}>Edit</a>
+        </div>
+    );
+  }
 });
 
 ReactDOM.render(
