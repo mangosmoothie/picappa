@@ -7,7 +7,10 @@
 
 .picContainer {
     display: inline-block;
-    padding: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 2.5px;
+    padding-bottom: 2.5px;
 }
 
 .pic {
