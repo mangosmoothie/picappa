@@ -2,7 +2,7 @@ from . import main
 import os.path
 import logging
 from flask import request, Response, current_app, jsonify
-from ..models import MediaItem, Status, MediaType
+from ..models import MediaItem, Status, MediaType, Tag
 from ..syncservices import get_mediastore, create_mediaitem, transfer_file, extract_and_attach_metadata, \
     search_for_and_mark_duplicate_mediaitem, remove_file, remove_duplicate_mediaitem_hashes, generate_hash_filepath, \
     get_pics, create_thumbnail, get_new_tag, update_mediaitem
@@ -68,3 +68,9 @@ def get_mediaitem_selections():
     media_types = [{'media_type_cd': member.value, 'name': member.name} for member in MediaType]
     statuses = [{'status_cd': member.value, 'name': member.name} for member in Status]
     return jsonify({'media_types': media_types, 'statuses': statuses})
+
+
+@main.route('/api/all-tags')
+def get_all_tags():
+    tags = [tag.name for tag in Tag.query.all()]
+    return jsonify({'tags': tags})

@@ -5,7 +5,8 @@ var PictureDisplay = React.createClass({
             columnWidth: "25%",
             editMode: false,
             editBtnClass: "col-xs-2 btn btn-default",
-            editBtnsStyle: {display: "none"}
+            editBtnsStyle: {display: "none"},
+            selectActionClass: "form-control" 
         };
     },
     handleEditClick: function(){
@@ -32,15 +33,26 @@ var PictureDisplay = React.createClass({
         return (
             <div className="pictureDisplay">
                 <div className="row">
-                    <div className="col-xs-10" >
+                    <div className="col-xs-8" >
                         <input type="range" min="1" max="10" 
                          value={this.state.columns} onChange={this.onColumnsChanged} 
                          ref="column" style={{width: "50%"}}/>
+                    </div>
+                    <div className="col-xs-2">
+                        <div className="dropdown">
+                            <select className={this.state.selectActionClass} >
+                                <option>Select</option>
+                                <option value="tag">Add Tags</option>
+                                <option value="del">Delete</option>
+                            </select>
+                        </div>
                     </div>
                     <div className={this.state.editBtnClass} style={styles.editBtn} 
                      onClick={this.handleEditClick} >
                         Edit
                     </div>
+                </div>
+                <div className="row">
                 </div>
                 <PictureBox url={this.props.url} columnWidth={this.state.columnWidth}
                  editMode={this.state.editMode} editBtnsStyle={this.state.editBtnsStyle} />
