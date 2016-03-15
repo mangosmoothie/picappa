@@ -128,3 +128,27 @@ function popAlert(msg, status){
     ab.attr('class', 'invisible');
   });
 }
+
+var selectedTags = [];
+
+function addTag(tag) {
+  if(!selectedTags.includes(tag)){
+    selectedTags.push(tag);
+    var tags = selectedTags.map(function (tag) {
+      return '<div class="tag btn btn-success">'+tag+"</div>";
+    });
+    $('#selectedTags').html(tags);
+  }
+  console.log(selectedTags);
+}
+
+function tagInputHandleKeyPress(event) {
+  if(event.keyCode == 13){
+    addTag($('#tagInput').val());
+    $('#tagInput').val('');
+  }
+  if(event.keyCode == 188){
+    addTag($('#tagInput').val().slice(0, -1));
+    $('#tagInput').val('');
+  }
+}

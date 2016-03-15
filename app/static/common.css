@@ -27,3 +27,13 @@
     border-style: solid;
     border-color: #00ff00;
 }
+
+.tag {
+    float: left;
+    margin: 2.5px;
+}
+
+.tagInput {
+    float: left;
+    margin: 2.5px;
+}

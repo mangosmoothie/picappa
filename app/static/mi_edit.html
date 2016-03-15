@@ -61,7 +61,15 @@
               
               <div id="tags" class="tab-pane fade">
                 <h3>Tags</h3>
+                <div class="form-group">
+                  <div class="col-xs-12">
+                    <div id="selectedTags">
 
+                    </div>
+                    <input id="tagInput" class="typeahead tagInput" type="text" placeholder="add a tag"
+                     onkeyup="return tagInputHandleKeyPress(event);" />
+                  </div>
+                </div>
               </div>
 
               <div id="advanced" class="tab-pane fade">
