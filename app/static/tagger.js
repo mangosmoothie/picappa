@@ -1,26 +1,12 @@
 var Tagger = React.createClass({
-  render: function() {
-    return (
-      <div>
-        <div className="col-xs-8">
-          <SelectedTags selectedTagsUrl={this.props.selectedTagsUrl} />
-        </div>
-        <div className="col-xs-4">
-          <TagPicker allTagsUrl={this.props.allTagsUrl} />
-        </div>
-      </div>
-    );
-  }
-});
-
-var SelectedTags = React.createClass({
   loadSelectedTagsFromServer: function() {
     $.ajax({
       url: this.props.selectedTagsUrl,
       dataType: 'json',
       cache: false,
       success: function(data) {
-        this.setState({data: data});
+        var tags = this.state.data.tags;
+        this.setState({data: {"tags": tags, "selectedTags": data.selectedTags}});
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.selectedTagsUrl, status, err.toString());
@@ -29,19 +15,77 @@ var SelectedTags = React.createClass({
   },
   getInitialState: function() {
     return {
-      data: {"selectedTags": []}
+      data: {"selectedTags": [], "tags": []}
     };
   },
   componentDidMount: function() {
     if(this.props.selectedTagsUrl){
       this.loadSelectedTagsFromServer();
     }
+
+    var substringMatcher = function(strs) {
+      return function findMatches(q, cb) {
+        var matches = [];
+        var substrRegex = new RegExp(q, 'i');
+
+        $.each(strs, function(i, str) {
+          if (substrRegex.test(str)) {
+            matches.push(str);
+          }
+        });
+
+        cb(matches);
+      };
+    };
+    $('#content .typeahead').typeahead({
+        hint: true,
+        highlight: true,
+        minLength: 1
+    },
+    {
+        name: 'tags',
+        source: substringMatcher(theData)
+    });
+  },
+  addTag: function(tag) {
+    if(!this.state.data.selectedTags.includes(tag)){
+      var tags = this.state.data.selectedTags;
+      var allTags = this.state.data.tags;
+      tags.push(tag);
+      this.setState({data: {"tags": allTags, "selectedTags": tags}});
+    }
+  },
+  handleKeyPress: function(event) {
+    if(event.keyCode == 13 || event.keyCode == 188){
+      this.addTag($('#tagInput').val());
+      $('#tagInput').val('');
+    }
   },
   render: function() {
-    if(this.props.data){
-      var tags = this.props.data.selectedTags.map(function (tag) {
-          <div className="tag" >
-          {tag}
+    return (
+      <div>
+        <div className="col-xs-8">
+          <SelectedTags selectedTags={this.state.data.selectedTags} />
+        </div>
+
+<div className="col-xs-4">
+      <input id="tagInput" className="typeahead" type="text" placeholder="add a tag"
+        onKeyUp={this.handleKeyPress} />
+  </div>
+      </div>
+    );
+  }
+});
+
+var SelectedTags = React.createClass({
+  render: function() {
+    console.log("rendering selected tags");
+    if(this.props.selectedTags > 0){
+      console.log("rendering tags");
+      var tags = this.props.selectedTags.map(function (tag) {
+        console.log(tag);
+        <div className="tag" >
+          tag
         </div>
       });
     }
@@ -53,64 +97,28 @@ var SelectedTags = React.createClass({
   }
 });
 
-var TagPicker = React.createClass({
-  loadAllTags: function() {
+var theData;
+
+var afun =  function() {
     $.ajax({
-      url: this.props.allTagsUrl,
+      url: "/api/all-tags",
       dataType: 'json',
       cache: false,
       success: function(data) {
-        this.setState({data: data});
+        theData = data;
       }.bind(this),
       error: function(xhr, status, err) {
-        console.error(this.props.allTagsUrl, status, err.toString());
       }.bind(this)
     });
-  },
-  getInitialState: function() {
-    return {
-      data: {"tags": []}
-    };
-  },
-  componentDidMount: function() {
-    this.loadAllTags();
-  },
-  render: function() {
-    var substringMatcher = function(strs) {
-      return function findMatches(q, cb) {
-
-        // an array that will be populated with substring matches
-        var matches = [];
-
-        // regex used to determine if a string contains the substring `q`
-        var substrRegex = new RegExp(q, 'i');
-
-        // iterate through the pool of strings and for any string that
-        // contains the substring `q`, add it to the `matches` array
-        $.each(strs, function(i, str) {
-          if (substrRegex.test(str)) {
-            matches.push(str);
-          }
-        });
-
-        cb(matches);
-      };
-    };
-        $('#content .typeahead').typeahead({
-            hint: true,
-            highlight: true,
-            minLength: 1
-        },
-        {
-            name: 'tags',
-            source: substringMatcher(['New', 'Old', 'Newd'])
-        });
-    return (
-      <input className="typeahead" type="text" placeholder="add a tag" />
-    );
+  };
+ afun(); 
+var handleKeyPress = function(event) {
+    if(event.keyCode == 13 || event.keyCode == 188){
+      this.props.addTag($('#tagInput').val());
+      $('#tagInput').val('');
+    }
   }
-});
-  
+
 ReactDOM.render(
   <Tagger allTagsUrl="/api/all-tags" />,
   document.getElementById('content')

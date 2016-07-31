@@ -8,7 +8,7 @@ import exifread
 from shutil import move
 from . import db
 from .models import MediaItem, MediaItemMediaStore, MediaType, MediaStore, Status, local_mediastore_designators, Tag
-from sqlalchemy import desc
+from sqlalchemy import desc, func
 
 
 def get_mediastore(designator):
@@ -141,3 +141,14 @@ def update_mediaitem(mediaitem):
     # TODO: add checks and tag stuff for mediaitem update
     create_or_update(mediaitem)
     return mediaitem
+
+
+def find_tags(tag_names):
+    tags = []
+    for t in tag_names:
+        tag = Tag.query.filter(func.lower(Tag.name) == func.lower(t)).first()
+        if tag:
+            tags.append(tag)
+        else:
+            tags.append(Tag(t))
+    return tags

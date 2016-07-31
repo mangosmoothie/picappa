@@ -1,3 +1,5 @@
+var selectedTags = [];
+
 function handleSumbitMediaItem() {
   var mi = buildMediaItem();
   
@@ -27,7 +29,7 @@ function handleSumbitMediaItem() {
 }
 
 function buildMediaItem() {
-  var mi = new Object();
+  var mi = {};
   var name = $('#name');
   mi.name = name.val() ? name.val() : name.attr('placeholder');
   var desc = $('#desc');
@@ -38,6 +40,7 @@ function buildMediaItem() {
   mi.media_type_cd = $('#media_type_cd').val();
   mi.status_cd = $('#status_cd').val();
   mi.id = mediaItemId;
+  mi.tags = selectedTags;
   return mi;
 }
 
@@ -99,6 +102,8 @@ function loadMediaItem (mediaitem_id) {
       $('#status_cd').val(data.status_cd);
       $('#media_type_cd').val(data.media_type_cd);
       $('#file_size').html(data.file_size);
+      selectedTags = data.tags.map(function(t){return t.name;});
+      drawTags();
     }.bind(this),
     error: function(xhr, status, err) {
       var msg = 'error loading mediaitem: ' + err;
@@ -129,26 +134,55 @@ function popAlert(msg, status){
   });
 }
 
-var selectedTags = [];
+
+function drawTags() {
+  var tags = selectedTags.map(function (tag) {
+    return '<div class="tag btn btn-success" onclick="removeTag(this.innerHTML)">'+tag+"</div>";
+  });
+  $('#selectedTags').html(tags);
+}
+
+function removeTag(tag) {
+  for(var i = 0; i < selectedTags.length; i ++){
+    if(selectedTags[i] == tag){
+      selectedTags.splice(i, 1);
+    }
+  }
+  drawTags();
+}
 
 function addTag(tag) {
-  if(!selectedTags.includes(tag)){
-    selectedTags.push(tag);
-    var tags = selectedTags.map(function (tag) {
-      return '<div class="tag btn btn-success">'+tag+"</div>";
-    });
-    $('#selectedTags').html(tags);
+  if(selectedTags.some(function(element, _, __){
+    return element.toLowerCase() == tag;
+      })){
+    return;
   }
-  console.log(selectedTags);
+  selectedTags.push(tag);
+  drawTags();
+}
+
+function removeComma(event){
+  if(event.keyCode == 188){
+    $('#tagInput').val('');
+  }
 }
 
 function tagInputHandleKeyPress(event) {
+  var ti = $('#tagInput');
   if(event.keyCode == 13){
-    addTag($('#tagInput').val());
-    $('#tagInput').val('');
+    addTag(ti.val());
+    ti.val('');
   }
   if(event.keyCode == 188){
-    addTag($('#tagInput').val().slice(0, -1));
-    $('#tagInput').val('');
+    if(ti.val().length > 0 && ti.val().indexOf(',') != 0){
+      addTag(ti.val());
+    }
+    ti.val('');
+  }
+  if(event.keyCode == 8 && ti.val() == ''){
+    if(ti.val().length == 0 && selectedTags.length > 0){
+      selectedTags.pop();
+      drawTags();
+    }
   }
 }

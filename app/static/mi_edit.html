@@ -67,7 +67,7 @@
 
                     </div>
                     <input id="tagInput" class="typeahead tagInput" type="text" placeholder="add a tag"
-                     onkeyup="return tagInputHandleKeyPress(event);" />
+                     onkeydown="return tagInputHandleKeyPress(event);" onkeyup="return removeComma(event);"/>
                   </div>
                 </div>
               </div>

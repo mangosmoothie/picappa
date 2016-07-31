@@ -26,6 +26,11 @@ class MediaItemMediaStoreDesig(Enum):
     backup = 300
 
 
+mediaitem_tag_table = db.Table('mediaitem_tag',
+                               db.Column('mediaitem_id', db.Integer, db.ForeignKey('mediaitem.id')),
+                               db.Column('tag_id', db.Integer, db.ForeignKey('tag.id')))
+
+
 class MediaItem(db.Model):
     __tablename__ = 'mediaitem'
 
@@ -44,6 +49,7 @@ class MediaItem(db.Model):
 
     thumbnail = db.relationship('MediaItem', remote_side=[id])
     mediaitem_mediastores = db.relationship('MediaItemMediaStore', cascade='all, delete-orphan', backref='mediaitem')
+    tags = db.relationship('Tag', secondary=mediaitem_tag_table, back_populates='media_items')
 
     #    media_type = MediaType(self.media_type_cd) if self.media_type_cd else None
 
@@ -80,15 +86,12 @@ class MediaItem(db.Model):
             'file_size': self.file_size,
             'url': [x.path for x in self.mediaitem_mediastores if x.designation_cd == 000][0],
             'thumb_url': [x.path for x in self.thumbnail.mediaitem_mediastores if x.designation_cd == 000][0]
+            if self.thumbnail else [],
+            'tags': [x.to_json() for x in self.tags]
         }
 
     def __repr__(self):
         return 'MediaItem(%r, %r, %r)' % (self.id, str(self.media_type_cd), self.name)
-
-
-mediaitem_tag_table = db.Table('mediaitem_tag',
-                               db.Column('mediaitem_id', db.Integer, db.ForeignKey('mediaitem.id')),
-                               db.Column('tag_id', db.Integer, db.ForeignKey('tag.id')))
 
 
 class Tag(db.Model):
@@ -99,7 +102,7 @@ class Tag(db.Model):
     name = db.Column(db.String(55), nullable=False, unique=True)
 
     children = db.relationship('Tag', backref=db.backref('parent', remote_side=[id]))
-    media_items = db.relationship('MediaItem', secondary=mediaitem_tag_table, backref='tags')
+    media_items = db.relationship('MediaItem', secondary=mediaitem_tag_table, back_populates='tags')
 
     def __init__(self, name, parent=None):
         self.name = name
@@ -107,6 +110,12 @@ class Tag(db.Model):
 
     def __repr__(self):
         return 'Tag(%r, %r)' % (self.id, self.name)
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'name': self.name
+        }
 
 
 # class MediaItemTag(db.Model):
