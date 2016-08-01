@@ -11,13 +11,6 @@ function handleSumbitMediaItem() {
     success: function(data) {
       var msg = 'successfully submitted update.';
       popAlert(msg, 'SUCCESS');
-      var returnUrl = getCookie("returnUrl");
-      //redirect to cookie location
-      if(returnUrl){
-        window.location = returnUrl;
-      }else{
-        window.location = "/";
-      }
     }.bind(this),
     error: function(xhr, status, err) {
       var msg = 'ajax request failed: ' + err;

@@ -1,5 +1,17 @@
 var PictureDisplay = React.createClass({
     getInitialState: function(){
+        var startAt = 1;
+        var perPage = 3;
+        if(window.location.search.indexOf("startAt") > 0 && window.location.search.indexOf("perPage") > 0){
+            var params = window.location.search.substring(1).split("&").map(function(e){return e.split("=");});
+            for(var i = 0; i < params.length; i++){
+                if(params[i][0] == "startAt"){
+                    startAt = Number(params[i][1]);
+                }else if (params[i][0] == "perPage"){
+                    perPage = Number(params[i][1]);
+                }
+            }
+        }
         return {
             columns: 4,
             columnWidth: "25%",
@@ -7,8 +19,8 @@ var PictureDisplay = React.createClass({
             editBtnClass: "col-xs-2 btn btn-default",
             editBtnsStyle: {display: "none"},
             selectActionClass: "form-control",
-            perPage: 3,
-            startAt: 1,
+            perPage: perPage,
+            startAt: startAt,
             tags: [{"id": 2}]
         };
     },
@@ -23,6 +35,7 @@ var PictureDisplay = React.createClass({
     },
     nextPage: function(){
         var startAt = this.state.startAt + this.state.perPage;
+        history.pushState(null, "pics", "?startAt="+startAt+"&perPage="+this.state.perPage);
         this.setState({startAt: startAt});
     },
     prevPage: function(){
@@ -30,6 +43,7 @@ var PictureDisplay = React.createClass({
         if(startAt < 1){
             startAt = 1;
         }
+        history.pushState(null, "pics", "?startAt="+startAt+"&perPage="+this.state.perPage);
         this.setState({startAt: startAt});
     },
     onColumnsChanged: function() {
@@ -98,9 +112,7 @@ var PictureBox = React.createClass({
     },
     handleNextClick: function(){
         var startAt = this.props.startAt + this.props.perPage;
-        console.log("startAt 1 = " + this.props.startAt);
         this.props.nextPage();
-        console.log("startAt 2 = " + this.props.startAt);
         this.loadPicturesFromServer(startAt);
     },
     handlePrevClick: function(){
