@@ -6,7 +6,10 @@ var PictureDisplay = React.createClass({
             editMode: false,
             editBtnClass: "col-xs-2 btn btn-default",
             editBtnsStyle: {display: "none"},
-            selectActionClass: "form-control" 
+            selectActionClass: "form-control",
+            perPage: 3,
+            startAt: 1,
+            tags: [{"id": 2}]
         };
     },
     handleEditClick: function(){
@@ -17,6 +20,17 @@ var PictureDisplay = React.createClass({
             this.setState({ editMode: true, editBtnClass: "col-xs-2 btn btn-success",
                           editBtnsStyle: {}});
         }
+    },
+    nextPage: function(){
+        var startAt = this.state.startAt + this.state.perPage;
+        this.setState({startAt: startAt});
+    },
+    prevPage: function(){
+        var startAt = this.state.startAt - this.state.perPage;
+        if(startAt < 1){
+            startAt = 1;
+        }
+        this.setState({startAt: startAt});
     },
     onColumnsChanged: function() {
         this.setState({
@@ -53,18 +67,21 @@ var PictureDisplay = React.createClass({
                     </div>
                 </div>
                 <div className="row">
+                    <hr/>
+                    <br/>
                 </div>
-                <PictureBox url={this.props.url} columnWidth={this.state.columnWidth}
-                 editMode={this.state.editMode} editBtnsStyle={this.state.editBtnsStyle} />
+                <PictureBox url={this.props.url} columnWidth={this.state.columnWidth} prevPage={this.prevPage}
+                 editMode={this.state.editMode} editBtnsStyle={this.state.editBtnsStyle} nextPage={this.nextPage}
+                 tags={this.state.tags} startAt={this.state.startAt} perPage={this.state.perPage} />
             </div>
         );
     }
 });
 
 var PictureBox = React.createClass({
-    loadPicturesFromServer: function() {
+    loadPicturesFromServer: function(startAt) {
         $.ajax({
-            url: this.props.url,
+            url: this.buildUrl(startAt),
             dataType: 'json',
             cache: false,
             success: function(data) {
@@ -75,19 +92,48 @@ var PictureBox = React.createClass({
             }.bind(this)
         });
     },
+    buildUrl: function(startAt) {
+        var tgs = this.props.tags.map(function(e){return e.id;}).join(",");
+        return this.props.url + "?startAt=" + startAt + "&perPage=" + this.props.perPage + "&tags=" + tgs;
+    },
+    handleNextClick: function(){
+        var startAt = this.props.startAt + this.props.perPage;
+        console.log("startAt 1 = " + this.props.startAt);
+        this.props.nextPage();
+        console.log("startAt 2 = " + this.props.startAt);
+        this.loadPicturesFromServer(startAt);
+    },
+    handlePrevClick: function(){
+        var startAt = this.props.startAt - this.props.perPage;
+        if(startAt < 1){
+            startAt = 1;
+        }
+        this.props.prevPage();
+        this.loadPicturesFromServer(startAt);
+    },
     getInitialState: function() {
         return {
             data: {"pictures":[]}
         };
     },
     componentDidMount: function() {
-        this.loadPicturesFromServer();
+        this.loadPicturesFromServer(this.props.startAt);
     },
     render: function() {
         return (
             <div className="pictureBox">
+                <div className="row">
+                    <div className="col-xs-8">
+                    </div>
+                    <div className="col-xs-2 btn btn-default btn-margin" onClick={this.handlePrevClick} style={{width:"14%"}} >
+                        Previous
+                    </div>
+                    <div className="col-xs-2 btn btn-default btn-margin" onClick={this.handleNextClick} style={{width:"14%"}} >
+                        Next
+                    </div>
+                </div>
                 <h1>Pictures</h1>
-                <PictureList columnWidth={this.props.columnWidth} data={this.state.data} 
+                <PictureList columnWidth={this.props.columnWidth} data={this.state.data}
                  editMode={this.props.editMode} editBtnsStyle={this.props.editBtnsStyle} />
             </div>
         );

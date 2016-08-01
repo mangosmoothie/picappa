@@ -53,7 +53,11 @@ def handle_mediaitem(mediaitem_id):
 
 @main.route('/api/pictures', methods=['GET'])
 def get_pictures():
-    pics = get_pics()
+    start_at = request.args['startAt']
+    per_page = request.args['perPage']
+    if start_at and per_page:
+        start_at, per_page = int(start_at), int(per_page)
+    pics = get_pics(start_num=start_at, per_page=per_page)
     logging.log(logging.INFO, 'got pics: ' + str(pics))
     return jsonify({'pictures': [pic.to_json() for pic in pics]})
 

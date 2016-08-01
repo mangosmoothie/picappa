@@ -47,7 +47,7 @@ def search_for_and_mark_duplicate_mediaitem(mediaitem):
 
 def transfer_file(src_mediastore, src_filename, dest_mediaitem_mediastore):
     if src_mediastore.designator in local_mediastore_designators() and \
-                dest_mediaitem_mediastore.mediastore.designator in local_mediastore_designators():
+                    dest_mediaitem_mediastore.mediastore.designator in local_mediastore_designators():
         move(os.path.join(src_mediastore.base_dir, src_filename), dest_mediaitem_mediastore.path)
         logging.log(logging.INFO,
                     'file: ' + os.path.join(src_mediastore.base_dir,
@@ -121,11 +121,12 @@ def generate_hash_file(file):
     return hashlib.md5(file.read()).hexdigest()
 
 
-def get_pics(start_num=None, end_num=None):
-    if start_num is None and end_num is None:
+def get_pics(tags=None, start_num=None, per_page=None):
+    if start_num is None and per_page is None:
         return MediaItem.query.filter(MediaItem.thumbnail_id != None).order_by(desc(MediaItem.modified_date)).all()
     else:
-        raise NotImplementedError('paging has not been implemented yet')
+        return MediaItem.query.filter(MediaItem.thumbnail_id != None).order_by(desc(MediaItem.modified_date)) \
+            .limit(per_page).offset(start_num + 1).all()
 
 
 def get_new_tag():
