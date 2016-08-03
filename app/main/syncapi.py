@@ -78,5 +78,5 @@ def get_mediaitem_selections():
 
 @main.route('/api/all-tags')
 def get_all_tags():
-    tags = [tag.name for tag in Tag.query.all()]
+    tags = [tag.to_json() for tag in Tag.query.all()]
     return jsonify({'tags': tags})
