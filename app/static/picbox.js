@@ -21,8 +21,57 @@ var PictureDisplay = React.createClass({
             selectActionClass: "form-control",
             perPage: perPage,
             startAt: startAt,
-            tags: [{"id": 2}]
+            tags: [],
+            selectedTags: []
         };
+    },
+    // drawTags: function(tagDivId, tags){
+    //     var tagElems = tags.map(function (tag) {
+    //         var tn = tag.name;
+    //         return '<div class="tag btn btn-success" onclick={this.moveTag(tag.name)}>'+tag.name+"</div>";
+    //     });
+    //     $(tagDivId).html(tagElems);
+    // },
+    loadAllTags: function(){
+        $.ajax({
+            url: "/api/all-tags",
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+                this.setState({tags: data['tags']});
+                // this.drawTags('#allTags', data['tags']);
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error("/api/all-tags", status, err.toString());
+            }.bind(this)
+        });
+    },
+    moveTag: function(tag){
+        var allTags = [];
+        var selectedTags = this.state.selectedTags;
+        for(var i = 0; i < this.state.tags.length; i++){
+            if(this.state.tags[i].id == tag.id){
+                selectedTags.push(this.state.tags[i]);
+            }else{
+                allTags.push(this.state.tags[i]);
+            }
+        }
+        this.setState({tags: allTags, selectedTags: selectedTags});
+    },
+    moveSelectedTag: function(tag){
+        var allTags = this.state.tags;
+        var selectedTags = [];
+        for(var i = 0; i < this.state.selectedTags.length; i++){
+            if(this.state.selectedTags[i].id == tag.id){
+                allTags.push(this.state.selectedTags[i]);
+            }else{
+                selectedTags.push(this.state.selectedTags[i]);
+            }
+        }
+        this.setState({tags: allTags, selectedTags: selectedTags});
+    },
+    componentDidMount: function() {
+        this.loadAllTags();
     },
     handleEditClick: function(){
         if(this.state.editMode){
@@ -80,6 +129,14 @@ var PictureDisplay = React.createClass({
                         Edit
                     </div>
                 </div>
+                <fieldset>
+                    <legend>All Tags</legend>
+                    <TagPicker intags={this.state.tags} handleMoveTag={this.moveTag} />
+                </fieldset>
+                <fieldset>
+                    <legend>Selected Tags</legend>
+                    <TagPicker intags={this.state.selectedTags} handleMoveTag={this.moveSelectedTag} />
+                </fieldset>
                 <div className="row">
                     <hr/>
                     <br/>
@@ -87,6 +144,33 @@ var PictureDisplay = React.createClass({
                 <PictureBox url={this.props.url} columnWidth={this.state.columnWidth} prevPage={this.prevPage}
                  editMode={this.state.editMode} editBtnsStyle={this.state.editBtnsStyle} nextPage={this.nextPage}
                  tags={this.state.tags} startAt={this.state.startAt} perPage={this.state.perPage} />
+            </div>
+        );
+    }
+});
+
+var Tag = React.createClass({
+    getInitialState: function(){
+        return {};
+    },
+    render: function(){
+        return <div className="tag btn btn-success" onClick={this.props.onClick}>{this.props.name}</div>
+    }
+});
+
+var TagPicker = React.createClass({
+    handleTagClick: function(tag){
+        this.props.handleMoveTag(tag);
+    },
+    render: function(){
+        return (
+            <div className="row">
+                {this.props.intags.map(function(tag){
+                    var handler = this.handleTagClick.bind(this, tag);
+                    return (
+                        <Tag key={tag.id} onClick={handler} name={tag.name}/>
+                    );
+                }, this)}
             </div>
         );
     }
