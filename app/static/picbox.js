@@ -1,6 +1,6 @@
 var PictureDisplay = React.createClass({
     getInitialState: function(){
-        var startAt = 1;
+        var startAt = 0;
         var perPage = 3;
         if(window.location.search.indexOf("startAt") > 0 && window.location.search.indexOf("perPage") > 0){
             var params = window.location.search.substring(1).split("&").map(function(e){return e.split("=");});
@@ -22,16 +22,10 @@ var PictureDisplay = React.createClass({
             perPage: perPage,
             startAt: startAt,
             tags: [],
-            selectedTags: []
+            selectedTags: [],
+            filterTags: []
         };
     },
-    // drawTags: function(tagDivId, tags){
-    //     var tagElems = tags.map(function (tag) {
-    //         var tn = tag.name;
-    //         return '<div class="tag btn btn-success" onclick={this.moveTag(tag.name)}>'+tag.name+"</div>";
-    //     });
-    //     $(tagDivId).html(tagElems);
-    // },
     loadAllTags: function(){
         $.ajax({
             url: "/api/all-tags",
@@ -82,17 +76,31 @@ var PictureDisplay = React.createClass({
                           editBtnsStyle: {}});
         }
     },
+    addFilterTags: function() {
+        var filts = [];
+        if(this.state.selectedTags.length > 0){
+            for(var i = 0; i < this.state.selectedTags.length; i++){
+                filts.push(this.state.selectedTags[i]);
+            }
+        }
+        this.setState({filterTags: filts});
+    },
+    buildTagsParam: function() {
+        if(this.state.filterTags.length > 0){
+            var tgs = this.state.filterTags.map(function(e){return e.id;}).join(",");
+            return "&tags=" + tgs;
+        }
+        return "";
+    },
     nextPage: function(){
         var startAt = this.state.startAt + this.state.perPage;
-        history.pushState(null, "pics", "?startAt="+startAt+"&perPage="+this.state.perPage);
         this.setState({startAt: startAt});
     },
     prevPage: function(){
         var startAt = this.state.startAt - this.state.perPage;
-        if(startAt < 1){
-            startAt = 1;
+        if(startAt < 0){
+            startAt = 0;
         }
-        history.pushState(null, "pics", "?startAt="+startAt+"&perPage="+this.state.perPage);
         this.setState({startAt: startAt});
     },
     onColumnsChanged: function() {
@@ -143,7 +151,8 @@ var PictureDisplay = React.createClass({
                 </div>
                 <PictureBox url={this.props.url} columnWidth={this.state.columnWidth} prevPage={this.prevPage}
                  editMode={this.state.editMode} editBtnsStyle={this.state.editBtnsStyle} nextPage={this.nextPage}
-                 tags={this.state.tags} startAt={this.state.startAt} perPage={this.state.perPage} />
+                 tags={this.state.filterTags} startAt={this.state.startAt} perPage={this.state.perPage}
+                 addFilterTags={this.addFilterTags} selectedTags={this.state.selectedTags} />
             </div>
         );
     }
@@ -177,35 +186,49 @@ var TagPicker = React.createClass({
 });
 
 var PictureBox = React.createClass({
-    loadPicturesFromServer: function(startAt) {
+    loadPicturesFromServer: function(startAt, filterTags) {
+        var url = this.buildUrl(startAt, filterTags);
         $.ajax({
-            url: this.buildUrl(startAt),
+            url: url,
             dataType: 'json',
             cache: false,
             success: function(data) {
                 this.setState({data: data});
+                history.pushState(null, "pics", this.buildUrlParams(startAt, filterTags));
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
             }.bind(this)
         });
     },
-    buildUrl: function(startAt) {
-        var tgs = this.props.tags.map(function(e){return e.id;}).join(",");
-        return this.props.url + "?startAt=" + startAt + "&perPage=" + this.props.perPage + "&tags=" + tgs;
+    buildUrlParams: function(startAt, filterTags){
+        var tgs = "";
+        if(filterTags){
+            tgs = filterTags.length > 0 ? "&tags=" + filterTags.map(function(e){return e.id;}).join(",") : "";
+        }
+        return "?startAt=" + startAt + "&perPage=" + this.props.perPage + tgs;
+    },
+    buildUrl: function(startAt, filterTags) {
+        return this.props.url + this.buildUrlParams(startAt, filterTags);
+    },
+    handleFilterClick: function() {
+        this.props.addFilterTags();
+        var filterTags = [];
+        this.props.selectedTags.forEach(function(e){filterTags.push(e)});
+        this.loadPicturesFromServer(0, filterTags);
     },
     handleNextClick: function(){
         var startAt = this.props.startAt + this.props.perPage;
         this.props.nextPage();
-        this.loadPicturesFromServer(startAt);
+        this.loadPicturesFromServer(startAt, this.props.tags);
     },
     handlePrevClick: function(){
         var startAt = this.props.startAt - this.props.perPage;
-        if(startAt < 1){
-            startAt = 1;
+        if(startAt < 0){
+            startAt = 0;
         }
         this.props.prevPage();
-        this.loadPicturesFromServer(startAt);
+        this.loadPicturesFromServer(startAt, this.props.tags);
     },
     getInitialState: function() {
         return {
@@ -213,13 +236,16 @@ var PictureBox = React.createClass({
         };
     },
     componentDidMount: function() {
-        this.loadPicturesFromServer(this.props.startAt);
+        this.loadPicturesFromServer(this.props.startAt, this.props.tags);
     },
     render: function() {
         return (
             <div className="pictureBox">
                 <div className="row">
-                    <div className="col-xs-8">
+                    <div className="col-xs-2 btn btn-default btn-margin" onClick={this.handleFilterClick} style={{width:"14%"}}>
+                        Filter
+                    </div>
+                    <div className="col-xs-6">
                     </div>
                     <div className="col-xs-2 btn btn-default btn-margin" onClick={this.handlePrevClick} style={{width:"14%"}} >
                         Previous

@@ -8,7 +8,7 @@ import exifread
 from shutil import move
 from . import db
 from .models import MediaItem, MediaItemMediaStore, MediaType, MediaStore, Status, local_mediastore_designators, Tag
-from sqlalchemy import desc, func
+from sqlalchemy import desc, func, and_
 
 
 def get_mediastore(designator):
@@ -121,12 +121,17 @@ def generate_hash_file(file):
     return hashlib.md5(file.read()).hexdigest()
 
 
-def get_pics(tags=None, start_num=None, per_page=None):
+def get_pics(tag_ids=None, start_num=None, per_page=None):
     if start_num is None and per_page is None:
         return MediaItem.query.filter(MediaItem.thumbnail_id != None).order_by(desc(MediaItem.modified_date)).all()
     else:
-        return MediaItem.query.filter(MediaItem.thumbnail_id != None).order_by(desc(MediaItem.modified_date)) \
-            .limit(per_page).offset(start_num + 1).all()
+        if tag_ids:
+            return db.session.query(MediaItem).join(MediaItem.tags) \
+                .filter(and_(MediaItem.thumbnail_id != None, Tag.id.in_(tag_ids))) \
+                .order_by(desc(MediaItem.modified_date)).limit(per_page).offset(start_num).distinct().all()
+        else:
+            return MediaItem.query.filter(MediaItem.thumbnail_id != None).order_by(desc(MediaItem.modified_date)) \
+                .limit(per_page).offset(start_num).all()
 
 
 def get_new_tag():
@@ -139,7 +144,6 @@ def create_or_update(item):
 
 
 def update_mediaitem(mediaitem):
-    # TODO: add checks and tag stuff for mediaitem update
     create_or_update(mediaitem)
     return mediaitem
 
