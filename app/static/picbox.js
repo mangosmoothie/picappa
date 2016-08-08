@@ -357,7 +357,7 @@ var PictureBox = React.createClass({
                         Next
                     </div>
                 </div>
-                <h1>Pictures</h1>
+                <br/>
                 <PictureList columnWidth={this.props.columnWidth} data={this.state.data} selectPic={this.selectPic}
                              editMode={this.props.editMode} editBtnsStyle={this.props.editBtnsStyle}
                              deselectPic={this.deselectPic}/>
@@ -388,7 +388,7 @@ var PictureList = React.createClass({
                                  key={picture.id} width={columnWidth} editurl={editurl} deselectPic={deselectHandler}
                                  editMode={editMode} editBtnsStyle={editBtnsStyle} selectPic={selectHandler}/>
                     );
-                }, this)};
+                }, this)}
             </div>
         );
     }
