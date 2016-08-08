@@ -72,6 +72,21 @@ class MediaItem(db.Model):
         self.media_type_cd = get_media_type(filepath).value
         self.status_cd = status.value
 
+    def has_tag(self, tag):
+        if not self.tags:
+            return False
+        for t in self.tags:
+            if t.id == tag.id:
+                return True
+        return False
+
+    def add_tag(self, tag):
+        if self.has_tag(tag):
+            return
+        if not self.tags:
+            self.tags = []
+        self.tags.append(tag)
+
     def to_json(self):
         return {
             'id': self.id,

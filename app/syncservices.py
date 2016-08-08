@@ -157,3 +157,13 @@ def find_tags(tag_names):
         else:
             tags.append(Tag(t))
     return tags
+
+
+def add_all_tags(pic_ids, tag_ids):
+    tags = db.session.query(Tag).filter(Tag.id.in_(tag_ids)).all()
+    mis = db.session.query(MediaItem).filter(MediaItem.id.in_(pic_ids)).all()
+    for mi in mis:
+        for tag in tags:
+            mi.add_tag(tag)
+        db.session.add(mi)
+    db.session.commit()

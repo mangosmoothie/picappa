@@ -5,7 +5,7 @@ from flask import request, Response, current_app, jsonify
 from ..models import MediaItem, Status, MediaType, Tag
 from ..syncservices import get_mediastore, create_mediaitem, transfer_file, extract_and_attach_metadata, \
     search_for_and_mark_duplicate_mediaitem, remove_file, remove_duplicate_mediaitem_hashes, generate_hash_filepath, \
-    get_pics, create_thumbnail, get_new_tag, update_mediaitem, find_tags
+    get_pics, create_thumbnail, get_new_tag, update_mediaitem, find_tags, add_all_tags
 
 
 @main.route('/api/process-transferred-media', methods=['POST'])
@@ -88,3 +88,15 @@ def get_mediaitem_selections():
 def get_all_tags():
     tags = [tag.to_json() for tag in Tag.query.all()]
     return jsonify({'tags': tags})
+
+
+@main.route('/api/tag-all', methods=['POST'])
+def tag_all_mediaitems():
+    content = request.get_json()
+    tag_ids = content.get('tagIds')
+    pic_ids = content.get('picIds')
+    if tag_ids and pic_ids:
+        add_all_tags(pic_ids, tag_ids)
+        return Response(status=200)
+    return Response(status=500)
+
