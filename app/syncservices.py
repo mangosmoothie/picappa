@@ -1,6 +1,6 @@
 import os.path
 import logging
-from PIL import Image
+from PIL import Image, ExifTags
 from datetime import datetime
 from flask import current_app
 import hashlib
@@ -30,6 +30,21 @@ def create_thumbnail(parent_mediaitem, parent_mediaitem_mediastore, mediastore):
     filename = str(parent_mediaitem.id)
     img.thumbnail((300, 300))
     filepath = os.path.join(mediastore.base_dir, 'thumbs', filename + '.png')
+
+    try:
+        for orientation in ExifTags.TAGS.keys():
+            if ExifTags.TAGS[orientation] == 'Orientation':
+                break
+        exif = dict(img._getexif().items())
+        if exif[orientation] == 3:
+            img = img.rotate(180)
+        elif exif[orientation] == 6:
+            img = img.rotate(270)
+        elif exif[orientation] == 8:
+            img = img.rotate(90)
+    except:
+        logging.exception('error getting image orientation')
+
     img.save(filepath, 'png')
     thumb = MediaItem(filename, generate_hash_filepath(filepath))
     parent_mediaitem.thumbnail = thumb
