@@ -1,7 +1,7 @@
 var PictureDisplay = React.createClass({
     getInitialState: function () {
         var startAt = 0;
-        var perPage = 3;
+        var perPage = 100;
         if (window.location.search.indexOf("startAt") > 0 && window.location.search.indexOf("perPage") > 0) {
             var params = window.location.search.substring(1).split("&").map(function (e) {
                 return e.split("=");

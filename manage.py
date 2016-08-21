@@ -3,8 +3,8 @@ import os
 import logging
 from app import create_app, db
 from app.models import MediaItem, Tag, MediaStore, MediaItemMediaStore, MediaType, Status
-from flask.ext.script import Manager, Shell, Server
-from flask.ext.migrate import Migrate, MigrateCommand
+from flask_script import Manager, Shell, Server
+from flask_migrate import Migrate, MigrateCommand
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default', False)
 manager = Manager(app)

@@ -9,16 +9,23 @@ RUN apt-get update && apt-get install -y \
         build-essential \
         supervisor \
         sqlite3 \
+        vim \
     && rm -rf /var/lib/apt/lists/*
 
 RUN easy_install3 pip
 
 RUN pip3 install uwsgi
 
-COPY ../requirements.txt ~/picappa/requirements.txt
+COPY requirements.txt /home/picappa/requirements.txt
 
-RUN pip3 install -r ~/picappa/requirements.txt
+RUN pip3 install -r /home/picappa/requirements.txt
 
-EXPOSE 80
+COPY . /home/picappa
 
-CMD ["/bin/bash"]
+COPY nginx-app.conf /etc/nginx/sites-available/default
+
+EXPOSE 80 9191
+
+WORKDIR "/home/picappa"
+
+CMD ["supervisord", "-n"]
