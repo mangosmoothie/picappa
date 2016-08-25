@@ -24,8 +24,14 @@ COPY . /home/picappa
 
 COPY nginx-app.conf /etc/nginx/sites-available/default
 
-EXPOSE 80 9191
+ENV FLASK_CONFIG=production
+
+EXPOSE 80 9191 2121
 
 WORKDIR "/home/picappa"
+
+RUN rm data.sqlite && sqlite3 data.sqlite && python3 manage.py db upgrade
+
+RUN sqlite3 data.sqlite < basedata.sql
 
 CMD ["supervisord", "-n"]

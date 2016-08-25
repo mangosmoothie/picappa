@@ -1,11 +1,45 @@
 from . import main
 import os.path
 import logging
+import json
+import codecs
 from flask import request, Response, current_app, jsonify
 from ..models import MediaItem, Status, MediaType, Tag
 from ..syncservices import get_mediastore, create_mediaitem, transfer_file, extract_and_attach_metadata, \
     search_for_and_mark_duplicate_mediaitem, remove_file, remove_duplicate_mediaitem_hashes, generate_hash_filepath, \
     get_pics, create_thumbnail, get_new_tag, update_mediaitem, find_tags, add_all_tags
+
+
+@main.route('/api/upload-files', methods=['POST'])
+def upload_files():
+    ms = get_mediastore(current_app.config['LOCAL_MEDIASTORE_DESIGNATOR'])
+    try:
+        # process_dupes = True if content.get('process_duplicates') == 'true' else False
+        process_dupes = False
+        reader = codecs.getreader('utf-8')
+        data = json.load(reader(request.files['deets']))
+        for filename in request.files.keys():
+            if filename == 'deets':
+                continue
+            file = request.files[filename]
+            hash_cd = data[filename]['hash_cd']
+            mi = MediaItem(filename, hash_cd, status=Status.new_bulk)
+            logging.log(logging.INFO, 'creating content for transferred file: ' + filename)
+            search_for_and_mark_duplicate_mediaitem(mi)
+            if process_dupes or not mi.status_cd == Status.new_dupe.value:
+                mi.tags.append(get_new_tag())
+                mi, ms, mi_ms = create_mediaitem(mi, ms)
+                file.save(mi_ms.path)
+                extract_and_attach_metadata(mi, mi_ms.path)
+                update_mediaitem(mi)
+                create_thumbnail(mi, mi_ms, ms)
+                logging.log(logging.INFO, 'successfully transferred file to: ' + mi_ms.path)
+            else:
+                logging.log(logging.INFO, 'duplicate file detected - file will not be processed: ' + filename)
+    except Exception as e:
+        logging.exception('big fail')
+        return Response(status=500)
+    return Response(status=200)
 
 
 @main.route('/api/process-transferred-media', methods=['POST'])
