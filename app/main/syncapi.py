@@ -37,7 +37,7 @@ def upload_files():
             else:
                 logging.log(logging.INFO, 'duplicate file detected - file will not be processed: ' + filename)
     except Exception as e:
-        logging.exception('big fail')
+        logging.exception('big fail while processing transferred files')
         return Response(status=500)
     return Response(status=200)
 

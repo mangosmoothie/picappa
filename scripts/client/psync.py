@@ -3,6 +3,7 @@ import json
 import hashlib
 from socket import getfqdn
 from requests import post
+from datetime import datetime
 
 
 def send_files(media_deets, files):
@@ -33,7 +34,7 @@ def sync_files():
             if not media_deets:
                 deets[file] = {'filesize': os.stat(filepath).st_size, 'hash_cd': hashcd}
                 to_upload[file] = (file, open(filepath, 'rb'), 'application/octet-stream')
-                data['transferred_media'][hashcd] = media_deets
+                data['transferred_media'][hashcd] = str(datetime.now())
                 if len(deets) > 4:
                     send_files(deets, to_upload)
                     deets, to_upload = {}, {}

@@ -76,7 +76,6 @@ def transfer_file(src_mediastore, src_filename, dest_mediaitem_mediastore):
 def extract_and_attach_metadata(mediaitem, filepath):
     media_file = open(filepath, 'rb')
     tags = exifread.process_file(media_file, details=False)
-    file_hash = generate_hash_file(media_file)
     org_date_tag = tags.get('EXIF DateTimeOriginal')
     org_date = datetime.now()
     if org_date_tag:
@@ -98,9 +97,8 @@ def extract_and_attach_metadata(mediaitem, filepath):
 
     mediaitem.origin_date = org_date
     mediaitem.file_size = file_size
-    mediaitem.hash_cd = file_hash
     logging.log(logging.DEBUG, str(mediaitem) + ' - set file size = ' + str(file_size) + ' set origin date = ' + str(
-        org_date) + ' set hash cd = ' + file_hash)
+        org_date))
 
 
 def remove_file(mediastore, filename):
