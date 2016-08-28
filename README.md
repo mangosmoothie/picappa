@@ -4,10 +4,10 @@ application for saving, sharing, searching, browsing, and tagging personal visua
 I use this app to manage all my personal media (family photos, vids, etc.) on a linux server I use primarily for storage at home.
 
 ## Picture Browser
-![View Pictures](/images/picviewer.png "View Pictures")
+![View Pictures](/images/picviewer.jpg "View Pictures")
 
 ## Multi-Select Edit / Tagging
-![Mutli Tagging](/images/tagger.png "Tag Pictures")
+![Mutli Tagging](/images/tagger.jpg "Tag Pictures")
 
 ## Overview
 
