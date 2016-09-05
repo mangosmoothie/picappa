@@ -30,7 +30,9 @@ EXPOSE 80 9191 2121
 
 WORKDIR "/home/picappa"
 
-RUN rm data.sqlite && sqlite3 data.sqlite && python3 manage.py db upgrade
+RUN rm data.sqlite; mkdir logs; exit 0 
+
+RUN sqlite3 data.sqlite && python3 manage.py db upgrade
 
 RUN sqlite3 data.sqlite < basedata.sql
 
