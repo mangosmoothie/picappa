@@ -1,4 +1,4 @@
-FROM ubuntu:16.10
+FROM ubuntu:16.04
 
 RUN apt-get update && apt-get install -y \
         git \
@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
         build-essential \
         supervisor \
         sqlite3 \
-        vim \
+        npm \
     && rm -rf /var/lib/apt/lists/*
 
 RUN easy_install3 pip
@@ -19,6 +19,12 @@ RUN pip3 install uwsgi
 COPY requirements.txt /home/picappa/requirements.txt
 
 RUN pip3 install -r /home/picappa/requirements.txt
+
+RUN npm install -g bower
+
+COPY bower.json /home/picappa/bower.json
+
+RUN ln -s /usr/bin/nodejs /usr/bin/node && bower install /home/picappa/bower.json
 
 COPY . /home/picappa
 
