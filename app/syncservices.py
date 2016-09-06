@@ -47,10 +47,10 @@ def create_thumbnail(parent_mediaitem, parent_mediaitem_mediastore, mediastore):
             logging.exception('error getting image orientation')
     elif parent_mediaitem.media_type_cd == 300:
         img = Image.open('app/static/images/video.jpg')
-        img.thumbnail((200, 200))
+        img.thumbnail((300, 300))
     else:
         img = Image.open('app/static/images/question-mark.jpg')
-        img.thumbnail((150, 150))
+        img.thumbnail((300, 300))
 
     img.save(filepath, 'jpeg')
     thumb = MediaItem(filename, generate_hash_filepath(filepath))
