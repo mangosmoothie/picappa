@@ -34,7 +34,7 @@ EXPOSE 80 9191 2121
 
 WORKDIR "/home/picappa"
 
-RUN bower install bower.json --allow-root
+RUN bower install bower.json --allow-root --force
 
 RUN rm data.sqlite; mkdir logs; exit 0 
 
