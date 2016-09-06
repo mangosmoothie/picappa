@@ -22,9 +22,7 @@ RUN pip3 install -r /home/picappa/requirements.txt
 
 RUN npm install -g bower
 
-COPY bower.json /home/picappa/bower.json
-
-RUN ln -s /usr/bin/nodejs /usr/bin/node && bower install /home/picappa/bower.json
+RUN ln -s /usr/bin/nodejs /usr/bin/node
 
 COPY . /home/picappa
 
@@ -35,6 +33,8 @@ ENV FLASK_CONFIG=production
 EXPOSE 80 9191 2121
 
 WORKDIR "/home/picappa"
+
+RUN bower install bower.json --allow-root
 
 RUN rm data.sqlite; mkdir logs; exit 0 
 
