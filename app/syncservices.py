@@ -26,26 +26,33 @@ def create_mediaitem(mediaitem, mediastore):
 
 
 def create_thumbnail(parent_mediaitem, parent_mediaitem_mediastore, mediastore):
-    img = Image.open(parent_mediaitem_mediastore.path)
     filename = str(parent_mediaitem.id)
-    img.thumbnail((300, 300))
-    filepath = os.path.join(mediastore.base_dir, 'thumbs', filename + '.png')
+    filepath = os.path.join(mediastore.base_dir, 'thumbs', filename + '.jpeg')
 
-    try:
-        for orientation in ExifTags.TAGS.keys():
-            if ExifTags.TAGS[orientation] == 'Orientation':
-                break
-        exif = dict(img._getexif().items())
-        if exif[orientation] == 3:
-            img = img.rotate(180)
-        elif exif[orientation] == 6:
-            img = img.rotate(270)
-        elif exif[orientation] == 8:
-            img = img.rotate(90)
-    except:
-        logging.exception('error getting image orientation')
+    if parent_mediaitem.media_type_cd == 100:
+        img = Image.open(parent_mediaitem_mediastore.path)
+        img.thumbnail((300, 300))
+        try:
+            for orientation in ExifTags.TAGS.keys():
+                if ExifTags.TAGS[orientation] == 'Orientation':
+                    break
+            exif = dict(img._getexif().items())
+            if exif[orientation] == 3:
+                img = img.rotate(180)
+            elif exif[orientation] == 6:
+                img = img.rotate(270)
+            elif exif[orientation] == 8:
+                img = img.rotate(90)
+        except:
+            logging.exception('error getting image orientation')
+    elif parent_mediaitem.media_type_cd == 300:
+        img = Image.open('app/static/images/video.jpg')
+        img.thumbnail((200, 200))
+    else:
+        img = Image.open('app/static/images/question-mark.jpg')
+        img.thumbnail((150, 150))
 
-    img.save(filepath, 'png')
+    img.save(filepath, 'jpeg')
     thumb = MediaItem(filename, generate_hash_filepath(filepath))
     parent_mediaitem.thumbnail = thumb
     mi_ms = MediaItemMediaStore(thumb, mediastore, filepath)
@@ -74,31 +81,33 @@ def transfer_file(src_mediastore, src_filename, dest_mediaitem_mediastore):
 
 
 def extract_and_attach_metadata(mediaitem, filepath):
-    media_file = open(filepath, 'rb')
-    tags = exifread.process_file(media_file, details=False)
-    org_date_tag = tags.get('EXIF DateTimeOriginal')
-    org_date = datetime.now()
-    if org_date_tag:
-        org_date = datetime.strptime(str(org_date_tag), '%Y:%m:%d %H:%M:%S')
-    else:
-        org_date_tag = tags.get('EXIF DateTimeDigitized')
-        if org_date_tag:
-            org_date = datetime.strptime(str(org_date_tag), '%Y:%m:%d %H:%M:%S')
-        else:
-            org_date_tag = os.stat(filepath).st_birthtime
+    if mediaitem.media_type_cd == 100:
+        try:
+            media_file = open(filepath, 'rb')
+            tags = exifread.process_file(media_file, details=False)
+            org_date_tag = tags.get('EXIF DateTimeOriginal')
+            org_date = datetime.now()
             if org_date_tag:
-                org_date = datetime.fromtimestamp(org_date_tag)
+                org_date = datetime.strptime(str(org_date_tag), '%Y:%m:%d %H:%M:%S')
             else:
-                org_date_tag = os.stat(filepath).st_ctime
+                org_date_tag = tags.get('EXIF DateTimeDigitized')
                 if org_date_tag:
-                    org_date = datetime.fromtimestamp(org_date_tag)
-
+                    org_date = datetime.strptime(str(org_date_tag), '%Y:%m:%d %H:%M:%S')
+                else:
+                    org_date_tag = os.stat(filepath).st_birthtime
+                    if org_date_tag:
+                        org_date = datetime.fromtimestamp(org_date_tag)
+                    else:
+                        org_date_tag = os.stat(filepath).st_ctime
+                        if org_date_tag:
+                            org_date = datetime.fromtimestamp(org_date_tag)
+            mediaitem.origin_date = org_date
+        except:
+            logging.error('failed to extract metadata for: ' + str(mediaitem))
     file_size = os.stat(filepath).st_size
 
-    mediaitem.origin_date = org_date
     mediaitem.file_size = file_size
-    logging.log(logging.DEBUG, str(mediaitem) + ' - set file size = ' + str(file_size) + ' set origin date = ' + str(
-        org_date))
+    logging.log(logging.DEBUG, str(mediaitem) + ' - set file size = ' + str(file_size))
 
 
 def remove_file(mediastore, filename):
@@ -148,7 +157,20 @@ def get_pics(tag_ids=None, start_num=None, per_page=None):
 
 
 def get_new_tag():
-    return Tag.query.filter(Tag.name == 'New').first()
+    return find_tag_by_name('New')
+
+
+def find_tag_by_name(tag_name):
+    return Tag.query.filter(Tag.name == tag_name).first()
+
+
+def find_or_create_tag_by_name(tag_name):
+    t = find_tag_by_name(tag_name)
+    if t is None:
+        t = Tag(tag_name)
+        db.session.add(t)
+        db.session.commit()
+    return t
 
 
 def create_or_update(item):

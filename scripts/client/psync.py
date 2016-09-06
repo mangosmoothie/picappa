@@ -32,7 +32,7 @@ def sync_files():
             hashcd = hashlib.md5(open(filepath, 'rb').read()).hexdigest()
             media_deets = data['transferred_media'].get(hashcd)
             if not media_deets:
-                deets[file] = {'filesize': os.stat(filepath).st_size, 'hash_cd': hashcd}
+                deets[file] = {'filesize': os.stat(filepath).st_size, 'hash_cd': hashcd, 'folder': os.path.basename(subdir)}
                 to_upload[file] = (file, open(filepath, 'rb'), 'application/octet-stream')
                 data['transferred_media'][hashcd] = str(datetime.now())
                 if len(deets) > 4:

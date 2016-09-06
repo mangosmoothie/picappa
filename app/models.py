@@ -186,12 +186,13 @@ class MediaItemMediaStore(db.Model):
 
 def get_media_type(filename):
     _, ext = os.path.splitext(filename)
-    if ext in ['.img', '.jpg', '.gif', '.jpeg', '.png']:
-        return MediaType.picture
-    elif ext in ['.mov', '.mpg', '.mp4', '.mpeg']:
-        return MediaType.video
-    else:
-        return MediaType.unknown
+    if ext is not None:
+        ext = ext.lower()
+        if ext in ['.img', '.jpg', '.gif', '.jpeg', '.png']:
+            return MediaType.picture
+        elif ext in ['.mov', '.mpg', '.mp4', '.mpeg']:
+            return MediaType.video
+    return MediaType.unknown
 
 
 def local_mediastore_designators():

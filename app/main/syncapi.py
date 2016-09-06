@@ -7,7 +7,7 @@ from flask import request, Response, current_app, jsonify
 from ..models import MediaItem, Status, MediaType, Tag
 from ..syncservices import get_mediastore, create_mediaitem, transfer_file, extract_and_attach_metadata, \
     search_for_and_mark_duplicate_mediaitem, remove_file, remove_duplicate_mediaitem_hashes, generate_hash_filepath, \
-    get_pics, create_thumbnail, get_new_tag, update_mediaitem, find_tags, add_all_tags
+    get_pics, create_thumbnail, get_new_tag, update_mediaitem, find_tags, add_all_tags, find_or_create_tag_by_name
 
 
 @main.route('/api/upload-files', methods=['POST'])
@@ -27,7 +27,10 @@ def upload_files():
             logging.log(logging.INFO, 'creating content for transferred file: ' + filename)
             search_for_and_mark_duplicate_mediaitem(mi)
             if process_dupes or not mi.status_cd == Status.new_dupe.value:
+                folder = data[filename]['folder']
+                folder_tag = find_or_create_tag_by_name(folder)
                 mi.tags.append(get_new_tag())
+                mi.tags.append(folder_tag)
                 mi, ms, mi_ms = create_mediaitem(mi, ms)
                 file.save(mi_ms.path)
                 extract_and_attach_metadata(mi, mi_ms.path)
