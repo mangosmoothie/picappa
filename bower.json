@@ -16,7 +16,7 @@
     "bootstrap": "~3.3.5",
     "react": "~0.14.1"
   },
-  "resolutions":
+  "resolutions": {
     "webcomponentsjs": "0.5.5"
   }
 }
