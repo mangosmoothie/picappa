@@ -145,14 +145,14 @@ def generate_hash_file(file):
 
 def get_pics(tag_ids=None, start_num=None, per_page=None):
     if start_num is None and per_page is None:
-        return MediaItem.query.filter(MediaItem.thumbnail_id != None).order_by(desc(MediaItem.origin_date)).all()
+        return MediaItem.query.filter(MediaItem.thumbnail_id != None).order_by(desc(MediaItem.id)).all()
     else:
         if tag_ids:
             return db.session.query(MediaItem).join(MediaItem.tags) \
                 .filter(and_(MediaItem.thumbnail_id != None, Tag.id.in_(tag_ids))) \
-                .order_by(desc(MediaItem.origin_date)).limit(per_page).offset(start_num).distinct().all()
+                .order_by(desc(MediaItem.id)).limit(per_page).offset(start_num).distinct().all()
         else:
-            return MediaItem.query.filter(MediaItem.thumbnail_id != None).order_by(desc(MediaItem.origin_date)) \
+            return MediaItem.query.filter(MediaItem.thumbnail_id != None).order_by(desc(MediaItem.id)) \
                 .limit(per_page).offset(start_num).all()
 
 
