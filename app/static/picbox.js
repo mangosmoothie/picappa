@@ -2,6 +2,7 @@ var PictureDisplay = React.createClass({
     getInitialState: function () {
         var startAt = 0;
         var perPage = 100;
+        var filterTags = [];
         if (window.location.search.indexOf("startAt") > 0 && window.location.search.indexOf("perPage") > 0) {
             var params = window.location.search.substring(1).split("&").map(function (e) {
                 return e.split("=");
@@ -11,6 +12,8 @@ var PictureDisplay = React.createClass({
                     startAt = Number(params[i][1]);
                 } else if (params[i][0] == "perPage") {
                     perPage = Number(params[i][1]);
+                } else if (params[i][0] == "tags") {
+                    filterTags = params[i][1].split(",").map(function(e){return {id: Number(e)};});
                 }
             }
         }
@@ -27,7 +30,7 @@ var PictureDisplay = React.createClass({
             startAt: startAt,
             tags: [],
             selectedTags: [],
-            filterTags: []
+            filterTags: filterTags
         };
     },
     loadAllTags: function () {
@@ -36,7 +39,25 @@ var PictureDisplay = React.createClass({
             dataType: 'json',
             cache: false,
             success: function (data) {
-                this.setState({tags: data['tags']});
+                var allTags = data['tags'];
+                var selectedTags = [];
+                var tags = [];
+                var filterTags = this.state.filterTags;
+                if(filterTags.length > 0){
+                    for (var i = 0; i < filterTags.length; i++) {
+                        for (var j = 0; j < allTags.length; j++){
+                            if(filterTags[i].id == allTags[j].id){
+                                selectedTags.push(allTags[j]);
+                                allTags.splice(j, 1);
+                                break;
+                            }
+                        }
+                    }
+                    tags = allTags;
+                }else{
+                    tags = allTags;
+                }
+                this.setState({tags: tags, selectedTags: selectedTags});
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error("/api/all-tags", status, err.toString());
