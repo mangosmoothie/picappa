@@ -2,7 +2,7 @@ var selectedTags = [];
 
 function handleSumbitMediaItem() {
   var mi = buildMediaItem();
-  
+
   $.ajax({
     url: '/api/mediaitem/' + mi.id,
     type: 'POST',
@@ -18,7 +18,7 @@ function handleSumbitMediaItem() {
       popAlert(msg, 'ERROR');
     }.bind(this)
   });
-  
+
 }
 
 function buildMediaItem() {
