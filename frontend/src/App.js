@@ -11,7 +11,7 @@ import PictureDisplay from './PictureDisplay';
 
 const Home = () => {
   return (
-    <PictureDisplay/>
+    <PictureDisplay url="/api/pictures" />
   );
 }
 

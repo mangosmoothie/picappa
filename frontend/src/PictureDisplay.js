@@ -1,5 +1,9 @@
 import React from 'react';
 import axios from 'axios';
+import {withRouter} from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap-theme.css';
+import Picture from './Picture';
 
 export default React.createClass({
   getInitialState: function () {
@@ -37,11 +41,9 @@ export default React.createClass({
     };
   },
   loadAllTags: function () {
-    axios.get({
-      url: '/api/all-tags',
-      responseType: 'json'
-    })
-      .then( (data) => {
+    axios.get('/api/all-tags')
+      .then( ({data}) => {
+        console.log('got data', data);
         var allTags = data['tags'];
         var selectedTags = [];
         var tags = [];
@@ -62,9 +64,7 @@ export default React.createClass({
         }
         this.setState({tags: tags, selectedTags: selectedTags});
       })
-      .catch( (xhr, status, err) => {
-        console.error("/api/all-tags", status, err.toString());
-      });
+      .catch( (err) => console.error(err) );
   },
   moveTag: function (tag) {
     var allTags = [];
@@ -140,7 +140,7 @@ export default React.createClass({
     this.setState({
       columnWidth: Math.floor(100 / parseInt(this.refs.column.value)) + "%",
       columns: this.refs.column.value
-    })
+    });
   },
   render: function () {
     var styles = {
@@ -215,23 +215,17 @@ var TagPicker = React.createClass({
   }
 });
 
-var PictureBox = React.createClass({
+var PictureBox = withRouter(React.createClass({
   loadPicturesFromServer: function (startAt, filterTags) {
     var url = this.buildUrl(startAt, filterTags);
-    axios.get({
-      url: url,
-      responseType: 'json'
-    })
-    .then(
-      (data) => {
-        this.setState({data: data});
-        history.pushState(null, "pics", this.buildUrlParams(startAt, filterTags));
-      })
-    .catch(
-      (xhr, status, err) => {
-        console.error(this.props.url, status, err.toString());
-      }
-    );
+    axios
+      .get(url)
+      .then(
+        ({data}) => {
+          this.setState({data: data});
+          //this.props.history.push("pics", this.buildUrlParams(startAt, filterTags));
+        })
+      .catch( (err) => console.error(err) );
   },
   addSelectedTagsToMediaItems: function () {
     var resp = {
@@ -240,18 +234,14 @@ var PictureBox = React.createClass({
         return e.id;
       })
     };
-    axios.get({
-      url: '/api/tag-all',
-      responseType: 'json'
-    })
+    axios
+      .get('/api/tag-all')
       .then(
-        (data) => {
+        ({data}) => {
           var msg = 'successfully submitted update.';
           this.popAlert(msg, 'SUCCESS');
         })
-      .catch(
-        (error) => console.error(error)
-      );
+      .catch( (error) => console.error(error) );
   },
   popAlert: function (msg, status) {
     var ab = document.getElementsByClassName('#alert');
@@ -385,7 +375,7 @@ var PictureBox = React.createClass({
         </div>
     );
   }
-});
+}));
 
 var PictureList = React.createClass({
   selectPic: function (picId) {
@@ -411,45 +401,6 @@ var PictureList = React.createClass({
           );
         }, this)}
       </div>
-    );
-  }
-});
-
-var Picture = React.createClass({
-  getInitialState: function () {
-    return {
-      selected: false,
-      selectedClass: "img-responsive pic"
-    };
-  },
-  handleClick: function (pic_id) {
-    if (this.props.editMode) {
-      if (this.state.selected) {
-        this.props.deselectPic(pic_id);
-        this.setState({selected: false, selectedClass: "img-responsive pic"});
-      } else {
-        this.props.selectPic(pic_id);
-        this.setState({selected: true, selectedClass: "img-responsive pic selectedItem"});
-      }
-    } else {
-      window.location = this.props.picurl;
-    }
-  },
-  render: function () {
-    var styles = {
-      container: {
-        width: this.props.width
-      }
-    };
-    var handler = this.handleClick.bind(this, this.props.key);
-    return (
-        <div className="picContainer" style={styles.container}>
-        <a href="javascript:void(0);" onClick={ handler }>
-        <img src={this.props.thumburl} className={this.state.selectedClass}/>
-        </a>
-        <a href={this.props.editurl} className="btn btn-primary btn-xs small-edit-button"
-      style={this.props.editBtnsStyle}>Edit</a>
-        </div>
     );
   }
 });
