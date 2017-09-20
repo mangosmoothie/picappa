@@ -43,7 +43,6 @@ export default React.createClass({
   loadAllTags: function () {
     axios.get('/api/all-tags')
       .then( ({data}) => {
-        console.log('got data', data);
         var allTags = data['tags'];
         var selectedTags = [];
         var tags = [];
@@ -193,7 +192,12 @@ var Tag = React.createClass({
     return {};
   },
   render: function () {
-    return <div className="tag btn btn-success" onClick={this.props.onClick}>{this.props.name}</div>
+    const style = {
+      float: 'left',
+      margin: '2.5px'
+    };
+    return <div className="btn btn-success" onClick={this.props.onClick} style={style}>
+      {this.props.name}</div>
   }
 });
 
@@ -396,7 +400,7 @@ var PictureList = React.createClass({
           var selectHandler = this.selectPic.bind(this, picture.id);
           return (
               <Picture name={picture.name} thumburl={picture.thumb_url} picurl={picture.url}
-            key={picture.id} width={columnWidth} editurl={editurl} deselectPic={deselectHandler}
+            key={picture.id} id={picture.id} width={columnWidth} editurl={editurl} deselectPic={deselectHandler}
             editMode={editMode} editBtnsStyle={editBtnsStyle} selectPic={selectHandler}/>
           );
         }, this)}
