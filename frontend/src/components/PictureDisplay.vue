@@ -1,9 +1,22 @@
 <template>
 
   <b-container fluid>
-    <TagDisplay v-bind:tags=tags v-on:remove="removeTag" />
-    <hr/>
-    <TagDisplay v-bind:tags=selectedTags v-on:remove="removeSelected" />
+    <b-row>
+      <b-col fluid>
+        <fieldset class="fieldsetmargin">
+          <legend class="legendbottom">All Tags</legend>
+          <TagDisplay v-bind:tags=tags v-on:remove="removeTag" />
+        </fieldset>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col fluid>
+        <fieldset class="fieldsetmargin">
+          <legend class="legendbottom">Selected Tags</legend>
+          <TagDisplay v-bind:tags=selectedTags v-on:remove="removeSelected" />
+        </fieldset>
+      </b-col>
+    </b-row>
   </b-container>
   
 </template>
@@ -41,3 +54,14 @@
     }
   }
 </script>
+
+<style scoped>
+.legendbottom {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #e5e5e5;
+}
+.fieldsetmargin {
+    margin-bottom: 10px;
+}
+</style>

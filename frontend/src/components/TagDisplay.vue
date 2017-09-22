@@ -1,13 +1,11 @@
 <template>
 
-  <b-container fluid>
-    <b-row>
-      <div v-for="tag in tags" class="tag btn btn-success"
-           v-on:click="remove(tag)">
-        {{ tag.name }}
-      </div>
-    </b-row>
-  </b-container>
+  <div>
+    <div v-for="tag in tags" class="tag btn btn-success"
+         v-on:click="remove(tag)">
+      {{ tag.name }}
+    </div>
+  </div>
   
 </template>
 
