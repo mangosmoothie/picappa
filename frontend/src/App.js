@@ -4,7 +4,6 @@ import {
   Route,
   Link
 } from 'react-router-dom';
-import logo from './logo.svg';
 import './App.css';
 import MediaItem from './mediaitem/MediaItem';
 import PictureDisplay from './picturedisplay/containers/PictureDisplay';
