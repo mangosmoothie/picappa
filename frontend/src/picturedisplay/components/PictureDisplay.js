@@ -6,7 +6,13 @@ const PictureDisplay = () => {
       <div>
         <FilteredTagDisplay
           field="selected"
-          predicate={ (x) => !x.selected }
+          predicate={ (x) => !x.get("selected") }
+          title="All Tags"
+        />
+        <FilteredTagDisplay
+          field="selected"
+          predicate={ (x) => x.get("selected") }
+          title="Selected Tags"
         />
       </div>
   )

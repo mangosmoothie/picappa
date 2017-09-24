@@ -15,7 +15,9 @@ const makeMapStateToProps = () => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    onTagClick: (id) => dispatch(toggleTagField(id, props.field))
+    onTagClick: (id) => {
+      dispatch(toggleTagField(id, props.field))
+    }
   }
 }
 

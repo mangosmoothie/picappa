@@ -8,7 +8,7 @@ export default function(state = List(), action){
   switch (action.type) {
   case TOGGLE_TAG:
     return state.map( tag => {
-      if (tag.id === action.id) {
+      if (tag.get('id') === action.id) {
         return tag.update(action.field, x => !x)
       }
       return tag
@@ -16,7 +16,7 @@ export default function(state = List(), action){
   case ADD_TAG:
     const defaults = {selected: false}
     return state.push(
-      Map({...action.tag, defaults})
+      Map({...action.tag, ...defaults})
     )
   default:
     return state

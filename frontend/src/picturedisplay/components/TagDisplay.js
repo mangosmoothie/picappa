@@ -10,18 +10,18 @@ const Tag = ( {onTagClick, name} ) => {
   };
   return (
     <Button
-      bsStyle="success"
+      bsStyle="info"
       onClick={onTagClick}
-      style={style}
-      >
+      style={style} >
       {name}
     </Button>
   )
 }
 
-export default ({ tags, onTagClick }) => {
+export default ({ tags, onTagClick, title }) => {
   return (
-    <ButtonToolbar>
+    <fieldset>
+      <legend>{title}</legend>
       {tags.map(function (tag) {
          return (
            <Tag key={tag.get("id")}
@@ -29,6 +29,6 @@ export default ({ tags, onTagClick }) => {
              name={tag.get("name")} />
          )
        })}
-    </ButtonToolbar>
+    </fieldset>
   )
 }
