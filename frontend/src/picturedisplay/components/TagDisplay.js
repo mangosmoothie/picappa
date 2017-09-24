@@ -19,9 +19,18 @@ const Tag = ( {onTagClick, name} ) => {
 }
 
 export default ({ tags, onTagClick, title }) => {
+  const legendbottom = {
+    borderBottomWidth: 1,
+    borderBottomStyle: "solid",
+    borderBottomColor: "#e5e5e5",
+    fontSize: "1rem"
+  }
+  const fieldsetmargin = {
+    marginBottom: 10
+  }
   return (
-    <fieldset>
-      <legend>{title}</legend>
+    <fieldset style={fieldsetmargin}>
+      <legend style={legendbottom}>{title}</legend>
       {tags.map(function (tag) {
          return (
            <Tag key={tag.get("id")}
