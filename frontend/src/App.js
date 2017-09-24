@@ -6,8 +6,8 @@ import {
 } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
-import MediaItem from './MediaItem';
-import PictureDisplay from './PictureDisplay';
+import MediaItem from './mediaitem/MediaItem';
+import PictureDisplay from './picturedisplay/containers/PictureDisplay';
 
 const Home = () => {
   return (
@@ -18,7 +18,7 @@ const Home = () => {
 const App = () => {
   return (
     <Router>
-      <div>
+      <div className="App" >
         <ul>
           <li><Link to="/">Home</Link></li>
           <li><Link to="/mediaitem">Media Item</Link></li>
