@@ -10,6 +10,7 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import reducers from './reducers'
 import { fetchTags } from './picturedisplay/actions/tags'
+import { fetchPics } from './picturedisplay/actions/pictures'
 
 const loggerMiddleware = createLogger()
 
@@ -19,6 +20,7 @@ let store = createStore(
 )
 
 store.dispatch(fetchTags())
+store.dispatch(fetchPics())
 
 ReactDOM.render(
   <Provider store={store}>
