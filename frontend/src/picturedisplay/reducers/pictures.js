@@ -3,12 +3,11 @@ import {
   ADD_PIC
 } from '../actions/pictures'
 
-const defaultState = Map({startAt: 0, limit: 50, pictures: List()})
+export const INITIAL_STATE = Map({startAt: 0, limit: 50, pictures: List()})
 
-export default function(state = defaultState, action){
+export default function(state = INITIAL_STATE, action){
   switch (action.type) {
   case ADD_PIC:
-    console.log('add pic', action.pic)
     return state.update('pictures', x => x.push(Map({...action.pic})))
   default:
     return state

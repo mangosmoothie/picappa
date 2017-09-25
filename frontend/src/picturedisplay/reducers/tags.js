@@ -4,19 +4,20 @@ import {
   ADD_TAG
 } from '../actions/tags'
 
-export default function(state = List(), action){
+export const INITIAL_STATE = Map()
+
+export default function(state = INITIAL_STATE, action){
   switch (action.type) {
   case TOGGLE_TAG:
-    return state.map( tag => {
-      if (tag.get('id') === action.id) {
-        return tag.update(action.field, x => !x)
-      }
-      return tag
-    })
+    return state.updateIn(
+      [action.id, action.field],
+      x => !x
+    )
   case ADD_TAG:
     const defaults = {selected: false}
-    return state.push(
-      Map({...action.tag, ...defaults})
+    return state.set(
+      action.tag.id,
+      Map({...defaults, ...action.tag})
     )
   default:
     return state
