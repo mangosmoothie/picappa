@@ -32,4 +32,3 @@ export function fetchTags(){
              (err) => console.error(err) )
   }
 }
-
