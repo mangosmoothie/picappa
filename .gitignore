@@ -1,6 +1,7 @@
 *.log
 *.sqlite
 node_modules/
+coverage/
 *.iml
 __pycache__/
 *.py[cod]
