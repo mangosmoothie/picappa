@@ -1,6 +1,11 @@
 import { createSelector } from 'reselect'
 
-export const getTags = state => state.tags
+const tags = state => state.tags
+
+export const getTags = createSelector(
+  [tags],
+  t => t
+)
 
 const predicate = (state, props) => props.predicate
 

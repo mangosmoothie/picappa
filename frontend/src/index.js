@@ -16,7 +16,7 @@ const loggerMiddleware = createLogger()
 
 let store = createStore(
   reducers,
-  applyMiddleware(thunk, loggerMiddleware)
+  applyMiddleware(thunk)
 )
 
 store.dispatch(fetchTags())

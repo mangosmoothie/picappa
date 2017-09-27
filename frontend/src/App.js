@@ -6,11 +6,11 @@ import {
 } from 'react-router-dom';
 import './App.css';
 import MediaItem from './mediaitem/MediaItem';
-import PictureDisplay from './picturedisplay/containers/PictureDisplay';
+import Gallery from './picturedisplay/containers/Gallery';
 
 const Home = () => {
   return (
-    <PictureDisplay url="/api/pictures" />
+    <Gallery url="/api/pictures" />
   );
 }
 

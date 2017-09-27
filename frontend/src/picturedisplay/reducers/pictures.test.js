@@ -1,6 +1,10 @@
 import { Map, List } from 'immutable'
-import pictures, { INITIAL_STATE } from '../reducers/pictures'
-import { addPic } from '../actions/pictures'
+import * as cut from '../reducers/pictures'
+import {
+  addPic,
+  updateStartAt,
+  updateLimit
+} from '../actions/pictures'
 import {
   newPicJson,
   picAddedState,
@@ -8,18 +12,26 @@ import {
 } from '../mocks/pictures'
 
 it('initial state', () => {
-  expect(INITIAL_STATE.has('pictures')).toBeTruthy()
-  expect(INITIAL_STATE.get('pictures')).toEqual(List())
-  expect(INITIAL_STATE.has('startAt')).toBeTruthy()
-  expect(INITIAL_STATE.has('limit')).toBeTruthy()
+  expect(cut.INITIAL_STATE).toEqual(Map())
+  expect(cut.INITIAL_STATE_STARTAT).toBeGreaterThanOrEqual(0)
+  expect(cut.INITIAL_STATE_LIMIT).toBeGreaterThan(0)
 })
 
 it('add pic', () => {
-  expect(picAddedState.get('pictures').size).toEqual(1)
-  expect(picsAddedState.get('pictures').first().get('id')).toEqual(newPicJson.id)
+  expect(picAddedState.size).toEqual(1)
+  expect(picsAddedState.first().get('id')).toEqual(newPicJson.id)
 
-  expect(picsAddedState.get('pictures').size).toEqual(3)
+  expect(picsAddedState.size).toEqual(3)
+})
 
-  expect(picAddedState.get('startAt')).toEqual(INITIAL_STATE.get('startAt'))
-  expect(picAddedState.get('limit')).toEqual(INITIAL_STATE.get('limit'))
+it('update startAt', () => {
+  const val = 100
+  const newState = cut.startAt(cut.INITIAL_STATE_STARTAT, updateStartAt(val))
+  expect(newState).toEqual(val)
+})
+
+it('update limit', () => {
+  const val = 100
+  const newState = cut.limit(cut.INITIAL_STATE_LIMIT, updateLimit(val))
+  expect(newState).toEqual(val)
 })

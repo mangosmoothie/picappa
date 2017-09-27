@@ -24,11 +24,11 @@ function getSelectedTags(state){
 }
 
 function getLimit(state){
-  return state.pictures.get('limit')
+  return state.limit
 }
 
 function getStartAt(state){
-  return state.pictures.get('startAt')
+  return state.startAt
 }
 
 export function fetchPics(){
@@ -43,5 +43,23 @@ export function fetchPics(){
       .then( ({ data }) => data['pictures']
              .map( p => dispatch(addPic(p)) ),
              (err) => console.error(err) )
+  }
+}
+
+export const UPDATE_STARTAT = 'UPDATE_STARTAT'
+
+export function updateStartAt(startAt){
+  return {
+    type: UPDATE_STARTAT,
+    startAt: startAt
+  }
+}
+
+export const UPDATE_LIMIT = 'UPDATE_LIMIT'
+
+export function updateLimit(limit){
+  return {
+    type: UPDATE_LIMIT,
+    limit: limit
   }
 }
