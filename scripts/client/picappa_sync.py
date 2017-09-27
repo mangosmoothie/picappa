@@ -21,7 +21,7 @@ def update_status_file():
             filepath = os.path.join(subdir, file)
             hashcd = hashlib.md5(open(filepath, 'rb').read()).hexdigest()
             media_deets = data['transferred_media'].get(hashcd)
-            if not media_deets:
+            if not media_deets and not filepath.endswith('.py'):
                 media_deets = {'filepath': filepath, 'filesize': os.stat(filepath).st_size, 'hash_cd': hashcd}
                 data['transferred_media'][hashcd] = media_deets
                 to_transfer.append(media_deets)

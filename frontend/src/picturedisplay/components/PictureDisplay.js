@@ -1,38 +1,26 @@
 import React from 'react'
+import { Grid, Row, Col } from 'react-bootstrap'
 
 const Picture = ( {url} ) => {
-  const style = {
-    height: 'auto',
-    width: '100%',
-    align: 'center',
-    backgroundSize: 'auto 100%',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center center',
-    backgroundImage: `url(${url})`
-  }
   return (
-    <div className="img-responsive" style={style} />
+    <a href="#" >
+      <img src={url} className="img-fluid" />
+    </a>
   )
 }
 
 export default ( {pictures} ) => {
-  const style = {
-    display: 'inline-block',
-    width: '25%',
-    paddingLeft: '5px',
-    paddingRight: '5px',
-    paddingTop: '2.5px',
-    paddingBottom: '2.5px'
-  }
   return (
-    <div className="container">
-      {pictures.map( (p) => {
-         return (
-           <div style={style}>
-             <Picture key={p.get('id')} url={p.get('url')} />
-           </div>
-         )
-      })}
-    </div>
+    <Grid>
+      <Row>
+        {pictures.map( (p) => {
+           return (
+             <Col sm={4} md={3} >
+               <Picture key={p.get('id')} url={p.get('url')} />
+             </Col>
+           )
+        })}
+      </Row>
+    </Grid>
   )
 }
