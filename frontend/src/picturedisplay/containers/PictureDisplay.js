@@ -5,7 +5,7 @@ import { fetchPics } from '../actions/pictures'
 
 const mapStateToProps = (state) => {
   return {
-    pictures: getPictures(state)
+    pictures: getPictures(state).valueSeq()
   }
 }
 

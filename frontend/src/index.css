@@ -4,3 +4,11 @@ body {
   background: #f5f5f5;
   font-family: sans-serif;
 }
+
+.pic-in-display {
+    margin: 3px;
+}
+
+.pic-display {
+    /* flex-wrap: wrap; */
+}

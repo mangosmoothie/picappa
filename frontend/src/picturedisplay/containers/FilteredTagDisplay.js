@@ -7,7 +7,7 @@ const makeMapStateToProps = () => {
   const getFilteredTags = makeGetFilteredTags()
   const mapStateToProps = (state, props) => {
     return {
-      tags: getFilteredTags(state, props)
+      tags: getFilteredTags(state, props).valueSeq()
     }
   }
   return mapStateToProps

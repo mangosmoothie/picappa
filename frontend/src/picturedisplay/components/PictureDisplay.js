@@ -11,16 +11,14 @@ const Picture = ( {url} ) => {
 
 export default ( {pictures} ) => {
   return (
-    <Grid>
-      <Row>
+      <div className="d-flex flex-wrap justify-content-center">
         {pictures.map( (p) => {
            return (
-             <Col sm={4} md={3} >
-               <Picture key={p.get('id')} url={p.get('url')} />
-             </Col>
+             <div className="d-inline-flex pic-in-display">
+               <Picture key={p.get('id')} url={p.get('thumb_url')} />
+             </div>
            )
         })}
-      </Row>
-    </Grid>
+      </div>
   )
 }

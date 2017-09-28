@@ -18,15 +18,21 @@ const App = () => {
   return (
     <Router>
       <div className="App" >
-        <ul>
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/mediaitem">Media Item</Link></li>
-        </ul>
+        <div className="flex-column">
+          <div className="flex-row">
+            <ul>
+              <li><Link to="/">Home</Link></li>
+              <li><Link to="/mediaitem">Media Item</Link></li>
+            </ul>
 
-        <hr/>
-
-        <Route exact path="/" component={Home}/>
-        <Route path="/mediaitem" component={MediaItem}/>
+          </div>
+          <div className="flex-row">
+            <Route exact path="/" component={Home}/>
+          </div>
+          <div className="flex-row">
+            <Route path="/mediaitem" component={MediaItem}/>
+          </div>
+        </div>
       </div>
     </Router>
 
