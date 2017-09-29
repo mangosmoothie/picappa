@@ -19,8 +19,13 @@ const App = () => {
     <Router>
       <div>
         <nav className="d-block p-3 navbar-fixed-top topNav">
-          <Link to="/">Home</Link>
-          <Link to="/mediaitem">Media Item</Link>
+          <div className="d-flex justify-content-start">
+                <Link to="/" className="p-2">Home</Link>
+                <Link to="/mediaitem" className="ml-auto">
+                  <div className="fa fa-2x fa-child" style={{color: 'black'}} />
+                </Link>
+                <div className="" />
+          </div>
         </nav>
         <div className="d-block p-1 topNavAccent" />
         <div className="App" >
