@@ -10,7 +10,7 @@ const Tag = ( {onTagClick, name} ) => {
   };
   return (
     <Button
-      bsStyle="info"
+      bsStyle="primary"
       onClick={onTagClick}
       style={style} >
       {name}

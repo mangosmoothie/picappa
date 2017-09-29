@@ -17,20 +17,22 @@ const Home = () => {
 const App = () => {
   return (
     <Router>
-      <div className="App" >
-        <div className="flex-column">
-          <div className="flex-row">
-            <ul>
-              <li><Link to="/">Home</Link></li>
-              <li><Link to="/mediaitem">Media Item</Link></li>
-            </ul>
-
-          </div>
-          <div className="flex-row">
-            <Route exact path="/" component={Home}/>
-          </div>
-          <div className="flex-row">
-            <Route path="/mediaitem" component={MediaItem}/>
+      <div>
+        <nav className="d-block p-3 navbar-fixed-top topNav">
+          <Link to="/">Home</Link>
+          <Link to="/mediaitem">Media Item</Link>
+        </nav>
+        <div className="d-block p-1 topNavAccent" />
+        <div className="App" >
+          <div className="flex-column">
+            <div className="flex-row">
+            </div>
+            <div className="flex-row">
+              <Route exact path="/" component={Home}/>
+            </div>
+            <div className="flex-row">
+              <Route path="/mediaitem" component={MediaItem}/>
+            </div>
           </div>
         </div>
       </div>

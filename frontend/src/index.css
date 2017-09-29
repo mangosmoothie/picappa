@@ -1,14 +1,36 @@
 body {
   margin: 0;
   padding: 0;
-  background: #f5f5f5;
+  background: #fafafa;
   font-family: sans-serif;
 }
 
 .pic-in-display {
-    margin: 3px;
+    margin: 4px;
+    width: 32%;
+    min-width: 150px;
 }
 
 .pic-display {
     /* flex-wrap: wrap; */
+}
+
+.btn-primary {
+    background-color: #00e5ff;
+    border-color: #00e5ff;
+    color: #000000;
+}
+
+.btn-primary:hover {
+    background-color: #00b2cc;
+    border-color: #00b2cc;
+    color: #000000;
+}
+
+.topNav {
+    background-color: #00e5ff;
+}
+
+.topNavAccent {
+    background-color: #ffff00;
 }
