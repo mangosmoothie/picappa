@@ -18,16 +18,17 @@ const App = () => {
   return (
     <Router>
       <div>
-        <nav className="d-block p-3 navbar-fixed-top topNav">
-          <div className="d-flex justify-content-start">
-                <Link to="/" className="p-2">Home</Link>
-                <Link to="/mediaitem" className="ml-auto">
-                  <div className="fa fa-2x fa-child" style={{color: 'black'}} />
-                </Link>
-                <div className="" />
-          </div>
-        </nav>
-        <div className="d-block p-1 topNavAccent" />
+        <div className="topNavContainer">
+          <nav className="p-3 topNav">
+            <div className="d-flex">
+              <Link to="/" className="p-1">Home</Link>
+              <Link to="/mediaitem" className="ml-auto">
+                <div className="fa fa-2x fa-child" style={{color: 'black'}} />
+              </Link>
+            </div>
+          </nav>
+          <div className="p-1 topNavAccent" />
+        </div>
         <div className="App" >
           <div className="flex-column">
             <div className="flex-row">

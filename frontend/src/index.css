@@ -3,6 +3,7 @@ body {
   padding: 0;
   background: #fafafa;
   font-family: sans-serif;
+  line-height: 1.5;
 }
 
 .pic-in-display {
@@ -29,6 +30,13 @@ body {
 
 .topNav {
     background-color: #00e5ff;
+}
+
+@media (min-width: 768px) {
+    .topNavContainer {
+        position: sticky;
+        top: 0;
+    }
 }
 
 .topNavAccent {
