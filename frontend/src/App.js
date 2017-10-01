@@ -20,10 +20,11 @@ const App = () => {
     <Router>
       <div>
         <div className="topNavContainer">
-          <nav className="p-3 topNav">
+          <nav className="p-2 topNav">
             <div className="d-flex">
-              <NavLink to="/gallery" activeClassName="active"
-                className="p-1">Home</NavLink>
+              <NavLink to="/gallery" className="p-1 top-nav-button"
+                activeStyle={{ color: '#ffff00'}}>Home</NavLink>
+              <NavLink to='/gallery' className="p-1 top-nav-button">Gallery</NavLink>
               <NavLink to="/mediaitem" activeClassName="active" className="ml-auto">
                 <div className="fa fa-2x fa-child" style={{color: 'black'}} />
               </NavLink>
