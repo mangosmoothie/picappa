@@ -2,7 +2,8 @@ import React from 'react';
 import {
   BrowserRouter as Router,
   Route,
-  Link
+  NavLink,
+  Redirect
 } from 'react-router-dom';
 import './App.css';
 import MediaItem from './mediaitem/MediaItem';
@@ -21,10 +22,11 @@ const App = () => {
         <div className="topNavContainer">
           <nav className="p-3 topNav">
             <div className="d-flex">
-              <Link to="/" className="p-1">Home</Link>
-              <Link to="/mediaitem" className="ml-auto">
+              <NavLink to="/gallery" activeClassName="active"
+                className="p-1">Home</NavLink>
+              <NavLink to="/mediaitem" activeClassName="active" className="ml-auto">
                 <div className="fa fa-2x fa-child" style={{color: 'black'}} />
-              </Link>
+              </NavLink>
             </div>
           </nav>
           <div className="p-1 topNavAccent" />
@@ -32,9 +34,10 @@ const App = () => {
         <div className="App" >
           <div className="flex-column">
             <div className="flex-row">
+              <Route exact path="/" render={() => <Redirect to="/gallery"/>} />
             </div>
             <div className="flex-row">
-              <Route exact path="/" component={Home}/>
+              <Route exact path="/gallery" component={Home}/>
             </div>
             <div className="flex-row">
               <Route path="/mediaitem" component={MediaItem}/>

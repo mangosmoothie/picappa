@@ -2,7 +2,7 @@ body {
   margin: 0;
   padding: 0;
   background: #fafafa;
-  font-family: sans-serif;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   line-height: 1.5;
 }
 
@@ -30,6 +30,14 @@ body {
 
 .topNav {
     background-color: #00e5ff;
+}
+
+.active {
+    color: red;
+}
+
+.top-nav-button {
+    color: white;
 }
 
 @media (min-width: 768px) {
