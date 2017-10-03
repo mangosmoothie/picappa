@@ -5,6 +5,7 @@ import {
   NavLink,
   Redirect
 } from 'react-router-dom';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import './App.css';
 import MediaItem from './mediaitem/MediaItem';
 import Gallery from './picturedisplay/containers/Gallery';
@@ -18,7 +19,7 @@ const Home = () => {
 const App = () => {
   return (
     <Router>
-      <div>
+      <MuiThemeProvider>
         <div className="topNavContainer">
           <nav className="p-2 topNav">
             <div className="d-flex">
@@ -45,7 +46,7 @@ const App = () => {
             </div>
           </div>
         </div>
-      </div>
+      </MuiThemeProvider>
     </Router>
 
   );

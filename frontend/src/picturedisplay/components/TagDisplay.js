@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button } from 'react-bootstrap'
+import React from 'react'
+import FlatButton from 'material-ui/FlatButton'
 
 const Tag = ( {onTagClick, name} ) => {
   const style = {
@@ -9,12 +9,12 @@ const Tag = ( {onTagClick, name} ) => {
     marginLeft: 5
   };
   return (
-    <Button
+    <FlatButton
       bsStyle="primary"
       onClick={onTagClick}
       style={style} >
       {name}
-    </Button>
+    </FlatButton>
   )
 }
 

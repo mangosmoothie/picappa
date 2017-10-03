@@ -1,5 +1,4 @@
 import React from 'react'
-import { Grid, Row, Col } from 'react-bootstrap'
 
 const Picture = ( {url} ) => {
   return (
