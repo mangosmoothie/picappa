@@ -1,36 +1,29 @@
 import React from 'react'
+import List from 'material-ui/List'
+import Subheader from 'material-ui/Subheader';
+import Chip from 'material-ui/Chip'
 import FlatButton from 'material-ui/FlatButton'
 
 const Tag = ( {onTagClick, name} ) => {
-  const style = {
-    paddingTop: "0.25rem",
-    paddingBottom: "0.25rem",
-    borderRadius: 0,
-    marginLeft: 5
-  };
   return (
-    <FlatButton
-      bsStyle="primary"
-      onClick={onTagClick}
-      style={style} >
+    <Chip onClick={onTagClick}>
       {name}
-    </FlatButton>
+    </Chip>
   )
 }
 
 export default ({ tags, onTagClick, title }) => {
-  const legendbottom = {
-    borderBottomWidth: 1,
-    borderBottomStyle: "solid",
-    borderBottomColor: "#e5e5e5",
-    fontSize: "1rem"
-  }
-  const fieldsetmargin = {
-    marginBottom: 10
+  const style = {
+    list: {
+      align: 'center',
+      display: 'flex',
+      flexDirection: 'row',
+      flexWrap: 'wrap'
+    }
   }
   return (
-    <fieldset style={fieldsetmargin}>
-      <legend style={legendbottom}>{title}</legend>
+    <List style={style.list}>
+      <Subheader>{title}</Subheader>
       {tags.map(function (tag) {
          return (
            <Tag key={tag.get("id")}
@@ -38,6 +31,6 @@ export default ({ tags, onTagClick, title }) => {
              name={tag.get("name")} />
          )
        })}
-    </fieldset>
+    </List>
   )
 }
