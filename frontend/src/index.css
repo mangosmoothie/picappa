@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  background: #fafafa;
+  background: #ecf0f1;
   font-family: 'Roboto', 'Avenir', Helvetica, Arial, sans-serif;
   line-height: 1.5;
 }
@@ -12,42 +12,6 @@ body {
     min-width: 150px;
 }
 
-.pic-display {
-    /* flex-wrap: wrap; */
-}
-
-.btn-primary {
-    background-color: #00e5ff;
-    border-color: #00e5ff;
-    color: #000000;
-}
-
-.btn-primary:hover {
-    background-color: #00b2cc;
-    border-color: #00b2cc;
-    color: #000000;
-}
-
-.topNav {
-    font-size: 18px;
-    font-weight: 600;
-    background-color: #00e5ff;
-}
-
-.active {
-    color: red;
-}
-
-.top-nav-button {
-    margin-right: 6px;
-    color: #ffffff;
-}
-
-.top-nav-button:hover {
-    color: #000000;
-    text-decoration: none;
-}
-
 @media (min-width: 768px) {
     .topNavContainer {
         position: sticky;
@@ -56,5 +20,5 @@ body {
 }
 
 .topNavAccent {
-    background-color: #ffff00;
+    background-color: #f1c40f;
 }
