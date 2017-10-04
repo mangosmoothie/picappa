@@ -11,7 +11,7 @@ const mockStore = configureMockStore(middlewares)
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  const store = mockStore({ tags: Map(), pictures: Map()})
+  const store = mockStore({ tags: Map(), pictures: Map(), controls: Map()})
   ReactDOM.render(
     <Provider store={store}>
       <App />

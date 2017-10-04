@@ -1,19 +1,19 @@
 import { Map } from 'immutable'
 import controls, * as cut from './controls'
 import {
-  toggleShowSearchModal
+  toggleShowMediaSearchPanel
 } from '../actions/controls'
 
 it('initial state', () => {
-  const showSearchModal = cut.INITIAL_STATE.get('show-search-modal')
-  expect(showSearchModal).toEqual(false)
+  const showSearchPanel = cut.INITIAL_STATE.get('show-media-search-panel')
+  expect(showSearchPanel).toEqual(false)
 })
 
 it('toggle show search modal', () => {
-  const initialState = Map({ 'show-search-modal': false})
-  const testStateTrue = controls(initialState, toggleShowSearchModal())
-  const testStateFalse = controls(testStateTrue, toggleShowSearchModal())
+  const initialState = Map({ 'show-media-search-panel': false})
+  const testStateTrue = controls(initialState, toggleShowMediaSearchPanel())
+  const testStateFalse = controls(testStateTrue, toggleShowMediaSearchPanel())
 
-  expect(testStateTrue.get('show-search-modal')).toEqual(true)
-  expect(testStateFalse.get('show-search-modal')).toEqual(false)
+  expect(testStateTrue.get('show-media-search-panel')).toEqual(true)
+  expect(testStateFalse.get('show-media-search-panel')).toEqual(false)
 })

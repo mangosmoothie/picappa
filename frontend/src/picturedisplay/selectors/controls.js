@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect'
 
-const showSearchModal = state => state.controls.get('show-search-modal')
+const showMediaSearchPanel = state => state.controls.get('show-media-search-panel')
 
-export const getShowSearchModal = createSelector(
-  [showSearchModal],
+export const getShowMediaSearchPanel = createSelector(
+  [showMediaSearchPanel],
   show => show
 )

@@ -5,7 +5,7 @@ import ActionSearch from 'material-ui/svg-icons/action/search'
 import ActionHome from 'material-ui/svg-icons/action/home'
 import { NavLink } from 'react-router-dom'
 import { white, primary, secondary } from '../../colors'
-import MediaSearch from './MediaSearch'
+import MediaSearchPanel from '../../picturedisplay/containers/MediaSearchPanel'
 
 const styles = {
   title: {
@@ -30,7 +30,7 @@ const MainAppBar = () => (
     style={styles.title}
     title={<span style={styles.title}>Title</span>}
     iconElementLeft={homeLink}
-    iconElementRight={<MediaSearch />}
+    iconElementRight={<MediaSearchPanel />}
   />
 );
 

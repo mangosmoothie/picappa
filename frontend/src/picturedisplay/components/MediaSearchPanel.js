@@ -8,7 +8,7 @@ import NavigationClose from 'material-ui/svg-icons/navigation/close'
 import { white, primary, secondary } from '../../colors'
 import FilteredTagDisplay from '../../picturedisplay/containers/FilteredTagDisplay'
 
-export default class MediaSearch extends React.Component {
+export default class MediaSearchPanel extends React.Component {
 
   constructor(props) {
     super(props);
