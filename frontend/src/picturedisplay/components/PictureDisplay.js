@@ -15,15 +15,12 @@ const styles = {
     minHeight: 180,
     maxWidth: 225,
     maxHeight: 225
-  },
-  pic: {
-    width: '100%'
-  },
+  }
 }
 
 const Picture = ( {url} ) => {
   const style = {
-    width: '100%',
+    width: 'auto',
     height: '100%',
     backgroundSize: 'cover',
     backgroundPosition: 'center center',
