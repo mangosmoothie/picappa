@@ -6,12 +6,6 @@ body {
   line-height: 1.5;
 }
 
-.pic-in-display {
-    margin: 4px;
-    width: 32%;
-    min-width: 150px;
-}
-
 @media (min-width: 768px) {
     .topNavContainer {
         position: sticky;

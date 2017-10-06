@@ -11,13 +11,13 @@ import FilteredTagDisplay from '../../picturedisplay/containers/FilteredTagDispl
 export default class MediaSearchPanel extends React.Component {
 
   constructor(props) {
-    super(props);
-    this.state = {open: false};
+    super(props)
+    this.state = {open: false}
   }
 
-  handleToggle = () => this.setState({open: !this.state.open});
+  handleToggle = () => this.setState({open: !this.state.open})
 
-  handleClose = () => this.setState({open: false});
+  handleClose = () => this.setState({open: false})
 
   style = {
     drawer: {
