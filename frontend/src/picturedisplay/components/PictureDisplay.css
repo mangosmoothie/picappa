@@ -1,0 +1,45 @@
+.overlay {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    width: 100%;
+    height: 0;
+    transition: .3s ease;
+}
+
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.container {
+    position: relative;
+    margin: 4px;
+    width: 20vw;
+    height: 20vw;
+    min-width: 180px;
+    min-height: 180px;
+    max-width: 225px;
+    max-height: 225px;
+}
+
+.container:hover .overlay {
+    height: 40px;
+}
+
+.picture {
+    width: auto;
+    height: 100%;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}

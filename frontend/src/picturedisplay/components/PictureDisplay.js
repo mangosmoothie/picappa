@@ -1,4 +1,10 @@
 import React from 'react'
+import IconButton from 'material-ui/IconButton'
+import ImageEdit from 'material-ui/svg-icons/image/edit'
+import ImageImage from 'material-ui/svg-icons/image/image'
+import FileDownload from 'material-ui/svg-icons/file/file-download'
+import { white } from '../../colors'
+import './PictureDisplay.css'
 
 const styles = {
   root: {
@@ -20,28 +26,34 @@ const styles = {
 
 const Picture = ( {url} ) => {
   const style = {
-    width: 'auto',
-    height: '100%',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center center',
-    backgroundRepeat: 'no-repeat',
     backgroundImage: "url('" + url + "')"
   }
 
   return (
     <a href="#" >
-      <div style={style} />
+      <div className="picture" style={style} />
     </a>
   )
 }
 
 export default ( {pictures} ) => {
   return (
-      <div style={styles.root}>
+      <div className="grid" >
         {pictures.map( (p) => {
            return (
-             <div key={p.get('id')}  style={styles.container}>
+             <div key={p.get('id')}  className="container" >
                <Picture url={p.get('thumb_url')} />
+               <div className="overlay">
+                 <IconButton>
+                   <ImageEdit color={white} />
+                 </IconButton>
+                 <IconButton>
+                   <ImageImage color={white} />
+                 </IconButton>
+                 <IconButton>
+                   <FileDownload color={white} />
+                 </IconButton>
+               </div>
              </div>
            )
         })}
