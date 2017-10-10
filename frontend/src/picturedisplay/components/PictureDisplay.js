@@ -1,28 +1,10 @@
 import React from 'react'
 import IconButton from 'material-ui/IconButton'
 import ImageEdit from 'material-ui/svg-icons/image/edit'
-import ImageImage from 'material-ui/svg-icons/image/image'
 import FileDownload from 'material-ui/svg-icons/file/file-download'
 import { white } from '../../colors'
 import './PictureDisplay.css'
-
-const styles = {
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-    justifyContent: 'center'
-  },
-  container: {
-    margin: 4,
-    width: '20vw',
-    height: '20vw',
-    minWidth: 180,
-    minHeight: 180,
-    maxWidth: 225,
-    maxHeight: 225
-  }
-}
+import MediaViewerDialog from '../../mediadetails/components/MediaViewerDialog'
 
 const Picture = ( {url} ) => {
   const style = {
@@ -47,9 +29,7 @@ export default ( {pictures} ) => {
                  <IconButton>
                    <ImageEdit color={white} />
                  </IconButton>
-                 <IconButton>
-                   <ImageImage color={white} />
-                 </IconButton>
+                 <MediaViewerDialog />
                  <IconButton>
                    <FileDownload color={white} />
                  </IconButton>

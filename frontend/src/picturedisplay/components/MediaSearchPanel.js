@@ -40,7 +40,7 @@ export default class MediaSearchPanel extends React.Component {
   render() {
     return (
       <div>
-        <IconButton onClick={this.handleToggle} >
+        <IconButton onClick={this.handleToggle}>
           <ActionSearch color={white} />
         </IconButton>
         <Drawer
