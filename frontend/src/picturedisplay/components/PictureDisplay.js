@@ -29,7 +29,7 @@ export default ( {pictures} ) => {
                  <IconButton>
                    <ImageEdit color={white} />
                  </IconButton>
-                 <MediaViewerDialog />
+                 <MediaViewerDialog url={p.get('url')} />
                  <IconButton>
                    <FileDownload color={white} />
                  </IconButton>

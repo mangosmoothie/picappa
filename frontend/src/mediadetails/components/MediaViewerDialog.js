@@ -1,6 +1,7 @@
 import React from 'react'
 import IconButton from 'material-ui/IconButton'
 import ImageImage from 'material-ui/svg-icons/image/image'
+import NavigationClose from 'material-ui/svg-icons/navigation/close'
 import Dialog from 'material-ui/Dialog'
 import { white } from '../../colors'
 
@@ -8,14 +9,38 @@ const styles = {
   container: {
     display: 'flex',
     displayDirection: 'column'
+  },
+  img: {
+    visibility: 'hidden',
+    width: '100%'
+  },
+  dialog: {
+    width: '100%'
   }
+}
+
+const Picture = ( { url, onClick } ) => {
+  const style = {
+    backgroundImage: "url('" + url + "')"
+  }
+
+  return (
+    <a href="#" onClick={onClick} >
+      <div className="picture" style={style} >
+        <img src={url} style={styles.img} />
+      </div>
+    </a>
+  )
 }
 
 export default class MediaViewerDialog extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {open: false}
+    this.state = {
+      open: false,
+      url: props.url
+    }
   }
 
   handleToggle = () => this.setState({open: !this.state.open})
@@ -32,21 +57,18 @@ export default class MediaViewerDialog extends React.Component {
         <Dialog
           modal={false}
           open={this.state.open}
-          onRequestClose={this.handleClose}
+          repositionOnUpdate={false}
+          autoDetectWindowHeight={false}
+          bodyStyle={{padding: 10}}
+          style={{paddingTop: 10, height: '100vh'}}
+          contentStyle={styles.dialog}
+          onRequestClose={this.handleClose} >
 
-        >
           <div style={styles.container}>
-            <IconButton onClick={this.handleClose} >
-              <NavigationClose />
-            </IconButton>
-
+            <Picture url={this.state.url} onClick={this.handleClose} />
           </div>
         </Dialog>
       </div>
     );
   }
-}
-export default () => {
-  return (
-  )
 }
