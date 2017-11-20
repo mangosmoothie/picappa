@@ -6,3 +6,10 @@ export const getShowMediaSearchPanel = createSelector(
   [showMediaSearchPanel],
   show => show
 )
+
+const mediaViewerDialogUrl = state => state.controls.get('media-viewer-dialog-url')
+
+export const getMediaViewerDialogUrl = createSelector(
+  [mediaViewerDialogUrl],
+  url => url
+)
