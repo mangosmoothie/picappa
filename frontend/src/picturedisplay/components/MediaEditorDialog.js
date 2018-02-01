@@ -34,7 +34,6 @@ const styles = {
 
 export default ({ closeDialog, item, mediaTypes, mediaStatuses }) => {
   const current_mi = item ? item : Map()
-  console.log(current_mi.get('status_cd'))
 
   return (
     <div>
