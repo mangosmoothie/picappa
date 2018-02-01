@@ -10,16 +10,18 @@ import registerServiceWorker from './registerServiceWorker';
 import reducers from './reducers'
 import { fetchTags } from './picturedisplay/actions/tags'
 import { fetchPics } from './picturedisplay/actions/pictures'
+import { fetchMediaSelections } from './picturedisplay/actions/mediaitems'
 
 const loggerMiddleware = createLogger()
 
 let store = createStore(
   reducers,
-  applyMiddleware(thunk, loggerMiddleware)
+  applyMiddleware(thunk)
 )
 
 store.dispatch(fetchTags())
 store.dispatch(fetchPics())
+store.dispatch(fetchMediaSelections())
 
 ReactDOM.render(
   <Provider store={store}>

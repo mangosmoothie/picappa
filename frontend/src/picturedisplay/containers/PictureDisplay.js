@@ -1,9 +1,10 @@
 import { connect } from 'react-redux'
 import PictureDisplay from '../components/PictureDisplay'
 import { getPictures } from '../selectors/pictures'
-import { fetchPics } from '../actions/pictures'
-import { getMediaViewerDialogUrl } from '../selectors/controls'
-import { setMediaViewerDialogUrl } from '../actions/controls'
+import {
+  setMediaViewerDialogUrl,
+  setMediaEditorDialogItem,
+} from '../actions/controls'
 
 const mapStateToProps = (state) => {
   return {
@@ -15,6 +16,9 @@ const mapDispatchToProps = dispatch => {
   return {
     setMediaViewerDialogUrl: (url) => {
       dispatch(setMediaViewerDialogUrl(url))
+    },
+    setMediaEditorDialogItem: (item) => {
+      dispatch(setMediaEditorDialogItem(item))
     }
   }
 }

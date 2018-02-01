@@ -1,10 +1,9 @@
 import React from 'react'
 import AppBar from 'material-ui/AppBar'
 import IconButton from 'material-ui/IconButton'
-import ActionSearch from 'material-ui/svg-icons/action/search'
 import ActionHome from 'material-ui/svg-icons/action/home'
 import { NavLink } from 'react-router-dom'
-import { white, primary, secondary } from '../../colors'
+import { white, primary } from '../../colors'
 import MediaSearchPanel from '../../picturedisplay/containers/MediaSearchPanel'
 
 const styles = {

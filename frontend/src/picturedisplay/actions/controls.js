@@ -22,3 +22,20 @@ export function setMediaViewerDialogUrl(url){
     url: url
   }
 }
+
+export const SET_MEDIA_EDITOR_DIALOG_ITEM = 'SET_MEDIA_EDITOR_DIALOG_ITEM'
+
+export function setMediaEditorDialogItem(item){
+  return {
+    type: SET_MEDIA_EDITOR_DIALOG_ITEM,
+    item: item
+  }
+}
+
+export const CLOSE_MEDIA_EDITOR_DIALOG = 'CLOSE_MEDIA_EDITOR_DIALOG'
+
+export function closeMediaEditorDialog(){
+  return {
+    type: CLOSE_MEDIA_EDITOR_DIALOG
+  }
+}

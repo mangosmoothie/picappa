@@ -3,7 +3,9 @@ import controls, * as cut from './controls'
 import {
   toggleShowMediaSearchPanel,
   setMediaViewerDialogUrl,
-  closeMediaViewerDialog
+  closeMediaViewerDialog,
+  setMediaEditorDialogItem,
+  closeMediaEditorDialog
 } from '../actions/controls'
 
 it('initial state', () => {
@@ -23,8 +25,8 @@ it('toggle show search modal', () => {
   expect(testStateFalse.get('show-media-search-panel')).toEqual(false)
 })
 
-it('toggle show media viewer dialog', () => {
-  const initialState = Map({ 'media-viewer-dialog-url': null})
+it('toggle media viewer dialog', () => {
+  const initialState = Map({ 'media-viewer-dialog-url': false})
   const testStateSome = controls(initialState, setMediaViewerDialogUrl('Some'))
   const testStateFalse = controls(testStateSome, setMediaViewerDialogUrl(false))
   const testStateClose = controls(testStateSome, closeMediaViewerDialog())
@@ -32,4 +34,16 @@ it('toggle show media viewer dialog', () => {
   expect(testStateSome.get('media-viewer-dialog-url')).toEqual('Some')
   expect(testStateFalse.get('media-viewer-dialog-url')).toEqual(false)
   expect(testStateClose.get('media-viewer-dialog-url')).toEqual(false)
+})
+
+it('toggle media editor dialog', () => {
+  const initialState = Map({ 'media-editor-dialog-item': false})
+  const anItem = {name: 'aname'}
+  const testStateSome = controls(initialState, setMediaEditorDialogItem(anItem))
+  const testStateFalse = controls(testStateSome, setMediaEditorDialogItem(false))
+  const testStateClose = controls(testStateSome, closeMediaEditorDialog())
+
+  expect(testStateSome.get('media-editor-dialog-item')).toEqual(anItem)
+  expect(testStateFalse.get('media-editor-dialog-item')).toEqual(false)
+  expect(testStateClose.get('media-editor-dialog-item')).toEqual(false)
 })

@@ -6,7 +6,12 @@ it('get show search modal', () => {
   expect(s).toEqual(false)
 })
 
-it('get show media viewer dialog', () => {
+it('get media viewer dialog url', () => {
   const s = cut.getMediaViewerDialogUrl(stateWithDefaults)
+  expect(s).toEqual(false)
+})
+
+it('get media editor dialog item', () => {
+  const s = cut.getMediaEditorDialogItem(stateWithDefaults)
   expect(s).toEqual(false)
 })

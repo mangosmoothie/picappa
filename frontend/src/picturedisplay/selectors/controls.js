@@ -13,3 +13,10 @@ export const getMediaViewerDialogUrl = createSelector(
   [mediaViewerDialogUrl],
   url => url
 )
+
+const mediaEditorDialogItem = state => state.controls.get('media-editor-dialog-item')
+
+export const getMediaEditorDialogItem = createSelector(
+  [mediaEditorDialogItem],
+  item => item
+)

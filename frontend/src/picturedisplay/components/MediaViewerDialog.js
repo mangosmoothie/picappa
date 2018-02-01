@@ -1,9 +1,5 @@
 import React from 'react'
-import IconButton from 'material-ui/IconButton'
-import ImageImage from 'material-ui/svg-icons/image/image'
-import NavigationClose from 'material-ui/svg-icons/navigation/close'
 import Dialog from 'material-ui/Dialog'
-import { white } from '../../colors'
 
 const styles = {
   container: {

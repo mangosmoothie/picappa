@@ -4,6 +4,7 @@ import ImageEdit from 'material-ui/svg-icons/image/edit'
 import ImageImage from 'material-ui/svg-icons/image/image'
 import FileDownload from 'material-ui/svg-icons/file/file-download'
 import MediaViewerDialog from '../containers/MediaViewerDialog'
+import MediaEditorDialog from '../containers/MediaEditorDialog'
 import { white } from '../../colors'
 import './PictureDisplay.css'
 
@@ -19,20 +20,24 @@ const Picture = ( { url, onClick } ) => {
   )
 }
 
-export default ( { pictures, setMediaViewerDialogUrl } ) => {
+export default ( { pictures,
+                   setMediaViewerDialogUrl,
+                   setMediaEditorDialogItem } ) => {
   return (
       <div className="grid" >
         <MediaViewerDialog />
+        <MediaEditorDialog />
         {pictures.map( (p) => {
-           const onClick = () => setMediaViewerDialogUrl(p.get('url'))
+           const onClickPic = () => setMediaViewerDialogUrl(p.get('url'))
+           const onClickEdit = () => setMediaEditorDialogItem(p)
            return (
              <div key={p.get('id')}  className="container" >
-               <Picture url={p.get('thumb_url')} onClick={onClick} />
+               <Picture url={p.get('thumb_url')} onClick={onClickPic} />
                <div className="overlay">
-                 <IconButton>
+                 <IconButton onClick={onClickEdit}>
                    <ImageEdit color={white} />
                  </IconButton>
-                 <IconButton onClick={onClick}>
+                 <IconButton onClick={onClickPic}>
                    <ImageImage color={white} />
                  </IconButton>
                  <IconButton>

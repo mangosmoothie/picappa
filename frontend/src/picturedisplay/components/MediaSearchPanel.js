@@ -5,7 +5,7 @@ import ActionSearch from 'material-ui/svg-icons/action/search'
 import Divider from 'material-ui/Divider'
 import Paper from 'material-ui/Paper'
 import NavigationClose from 'material-ui/svg-icons/navigation/close'
-import { white, primary, secondary } from '../../colors'
+import { white } from '../../colors'
 import FilteredTagDisplay from '../../picturedisplay/containers/FilteredTagDisplay'
 
 export default class MediaSearchPanel extends React.Component {

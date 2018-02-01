@@ -2,7 +2,6 @@ import React from 'react'
 import List from 'material-ui/List'
 import Subheader from 'material-ui/Subheader';
 import Chip from 'material-ui/Chip'
-import FlatButton from 'material-ui/FlatButton'
 
 const Tag = ( {onTagClick, name} ) => {
   const style = {
