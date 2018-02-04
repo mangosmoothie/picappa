@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 
-const tags = state => state.tags
+const tags = state => state.get('tags')
 
 export const getTags = createSelector(
   [tags],

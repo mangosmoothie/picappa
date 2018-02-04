@@ -1,4 +1,4 @@
-import { combineReducers } from 'redux'
+import { combineReducers } from 'redux-immutable'
 import tags from './picturedisplay/reducers/tags'
 import pictures, {startAt, limit} from './picturedisplay/reducers/pictures'
 import controls from './picturedisplay/reducers/controls'

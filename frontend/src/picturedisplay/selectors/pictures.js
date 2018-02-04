@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 
-const getPics = state => state.pictures
+const getPics = state => state.get('pictures')
 
 export const getPictures = createSelector(
   [getPics],

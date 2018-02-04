@@ -18,17 +18,17 @@ export function addPic(pic){
 }
 
 function getSelectedTags(state){
-  return state.tags
+  return state.get('tags')
     .filter( t => t.get('selected') )
     .map( t => t.get('id') )
 }
 
 function getLimit(state){
-  return state.limit
+  return state.get('limit')
 }
 
 function getStartAt(state){
-  return state.startAt
+  return state.get('startAt')
 }
 
 export function fetchPics(){

@@ -11,11 +11,14 @@ import reducers from './reducers'
 import { fetchTags } from './picturedisplay/actions/tags'
 import { fetchPics } from './picturedisplay/actions/pictures'
 import { fetchMediaSelections } from './picturedisplay/actions/mediaitems'
+import { Map } from 'immutable'
 
 const loggerMiddleware = createLogger()
+const INITIAL_STATE = Map()
 
 let store = createStore(
   reducers,
+  INITIAL_STATE,
   applyMiddleware(thunk)
 )
 
