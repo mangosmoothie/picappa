@@ -7,7 +7,10 @@ import {
   getMediaStatuses,
   getMediaTypes
 } from '../selectors/mediaitems'
-import { closeMediaEditorDialog } from '../actions/controls'
+import {
+  setMediaEditorDialogItem,
+  closeMediaEditorDialog
+} from '../actions/controls'
 
 const mapStateToProps = state => {
   return {
@@ -19,6 +22,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    updateItem: (item) => {
+      dispatch(setMediaEditorDialogItem(item))
+    },
     closeDialog: () => {
       dispatch(closeMediaEditorDialog())
     }

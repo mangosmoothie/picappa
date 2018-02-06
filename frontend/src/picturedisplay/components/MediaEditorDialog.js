@@ -32,7 +32,7 @@ const styles = {
   }
 }
 
-export default ({ closeDialog, item, mediaTypes, mediaStatuses }) => {
+export default ({ closeDialog, item, mediaTypes, mediaStatuses, updateItem }) => {
   const current_mi = item ? item : Map()
 
   return (
@@ -71,7 +71,8 @@ export default ({ closeDialog, item, mediaTypes, mediaStatuses }) => {
                   <SelectField
                     floatingLabelText='Media Type'
                     floatingLabelFixed={true}
-                    value={current_mi.get('media_type_cd')}
+                    onChange={ (e, i, v) => updateItem(current_mi.set('media_type_cd', v))}
+                    value={ current_mi.get('media_type_cd') }
                   >
                     {mediaTypes.valueSeq().map(x =>
                       <MenuItem key={x.get('media_type_cd')}
@@ -84,6 +85,7 @@ export default ({ closeDialog, item, mediaTypes, mediaStatuses }) => {
                   <SelectField
                     floatingLabelText='Status'
                     floatingLabelFixed={true}
+                    onChange={ (e, i, v) => updateItem(current_mi.set('status_cd', v)) }
                     value={current_mi.get('status_cd')}
                   >
                     {mediaStatuses.valueSeq().map(x =>
