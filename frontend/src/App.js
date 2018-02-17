@@ -23,9 +23,9 @@ const App = () => {
         <div>
           <MainAppBar />
           <div className="App" >
-            <Route exact path="/" render={() => <Redirect to="/gallery"/>} />
-            <Route exact path="/gallery" component={Home}/>
+            <Route exact path="/picappa" component={Home}/>
             <Route path="/mediaitem" component={MediaItem}/>
+            <Route path="*" render={() => <Redirect to="/picappa"/>} />
           </div>
         </div>
       </MuiThemeProvider>

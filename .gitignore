@@ -1,6 +1,7 @@
 *.log
 *.sqlite
 node_modules/
+frontend/build/
 coverage/
 *.iml
 __pycache__/

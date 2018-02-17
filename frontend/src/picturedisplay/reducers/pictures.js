@@ -10,6 +10,7 @@ export const INITIAL_STATE = Map()
 export default function(state = INITIAL_STATE, action){
   switch (action.type) {
   case ADD_PIC:
+    console.log('adding pic, ', action.pic.url, action.pic.id)
     return state.set(action.pic.id, Map({...action.pic}))
   default:
     return state

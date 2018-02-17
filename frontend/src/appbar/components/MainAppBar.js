@@ -15,20 +15,27 @@ const styles = {
 
 };
 
-const homeLink = (
-  <NavLink to="/gallery" style={styles.navLink}>
+const HomeLink = props => (
+  <NavLink to="/picappa" style={styles.navLink}>
+    { props.children }
+  </NavLink>
+)
+
+const LeftElement = (
+  <HomeLink>
     <IconButton >
       <ActionHome color={white} />
     </IconButton>
-  </NavLink>
+  </HomeLink>
 )
+
 
 const MainAppBar = () => (
   <AppBar
     className="topNavContainer"
     style={styles.title}
-    title={<span style={styles.title}>Title</span>}
-    iconElementLeft={homeLink}
+    title={<HomeLink><span style={styles.title}>Picappa</span></HomeLink>}
+    iconElementLeft={LeftElement}
     iconElementRight={<MediaSearchPanel />}
   />
 );
