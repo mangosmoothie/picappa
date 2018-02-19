@@ -1,49 +1,65 @@
-import { Map } from 'immutable'
 import controls, * as cut from './controls'
 import {
   toggleShowMediaSearchPanel,
   setMediaViewerDialogUrl,
   closeMediaViewerDialog,
   setMediaEditorDialogItem,
-  closeMediaEditorDialog
+  closeMediaEditorDialog,
+  updateStartAt,
+  updateLimit
 } from '../actions/controls'
 
 it('initial state', () => {
-  const showSearchPanel = cut.INITIAL_STATE.get('show-media-search-panel')
+  const showSearchPanel = cut.INITIAL_STATE.showMediaSearchPanel
   expect(showSearchPanel).toEqual(false)
 
-  const mediaViewerDialogUrl = cut.INITIAL_STATE.get('media-viewer-dialog-url')
+  const mediaViewerDialogUrl = cut.INITIAL_STATE.mediaViewerDialogUrl
   expect(mediaViewerDialogUrl).toEqual(false)
+
+  expect(cut.INITIAL_STATE_STARTAT).toBeGreaterThanOrEqual(0)
+  expect(cut.INITIAL_STATE_LIMIT).toBeGreaterThan(0)
 })
 
 it('toggle show search modal', () => {
-  const initialState = Map({ 'show-media-search-panel': false})
+  const initialState = {'showMediaSearchPanel': false}
   const testStateTrue = controls(initialState, toggleShowMediaSearchPanel())
   const testStateFalse = controls(testStateTrue, toggleShowMediaSearchPanel())
 
-  expect(testStateTrue.get('show-media-search-panel')).toEqual(true)
-  expect(testStateFalse.get('show-media-search-panel')).toEqual(false)
+  expect(testStateTrue.showMediaSearchPanel).toEqual(true)
+  expect(testStateFalse.showMediaSearchPanel).toEqual(false)
 })
 
 it('toggle media viewer dialog', () => {
-  const initialState = Map({ 'media-viewer-dialog-url': false})
+  const initialState = {'mediaViewerDialogUrl': false}
   const testStateSome = controls(initialState, setMediaViewerDialogUrl('Some'))
   const testStateFalse = controls(testStateSome, setMediaViewerDialogUrl(false))
   const testStateClose = controls(testStateSome, closeMediaViewerDialog())
 
-  expect(testStateSome.get('media-viewer-dialog-url')).toEqual('Some')
-  expect(testStateFalse.get('media-viewer-dialog-url')).toEqual(false)
-  expect(testStateClose.get('media-viewer-dialog-url')).toEqual(false)
+  expect(testStateSome.mediaViewerDialogUrl).toEqual('Some')
+  expect(testStateFalse.mediaViewerDialogUrl).toEqual(false)
+  expect(testStateClose.mediaViewerDialogUrl).toEqual(false)
 })
 
 it('toggle media editor dialog', () => {
-  const initialState = Map({ 'media-editor-dialog-item': false})
+  const initialState = {'mediaEditorDialogItem': false}
   const anItem = {name: 'aname'}
   const testStateSome = controls(initialState, setMediaEditorDialogItem(anItem))
   const testStateFalse = controls(testStateSome, setMediaEditorDialogItem(false))
   const testStateClose = controls(testStateSome, closeMediaEditorDialog())
 
-  expect(testStateSome.get('media-editor-dialog-item')).toEqual(anItem)
-  expect(testStateFalse.get('media-editor-dialog-item')).toEqual(false)
-  expect(testStateClose.get('media-editor-dialog-item')).toEqual(false)
+  expect(testStateSome.mediaEditorDialogItem).toEqual(anItem)
+  expect(testStateFalse.mediaEditorDialogItem).toEqual(false)
+  expect(testStateClose.mediaEditorDialogItem).toEqual(false)
+})
+
+it('update startAt', () => {
+  const val = 100
+  const newState = controls(cut.INITIAL_STATE_STARTAT, updateStartAt(val))
+  expect(newState.startAt).toEqual(val)
+})
+
+it('update limit', () => {
+  const val = 100
+  const newState = controls(cut.INITIAL_STATE_LIMIT, updateLimit(val))
+  expect(newState.limit).toEqual(val)
 })

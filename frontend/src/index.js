@@ -11,11 +11,10 @@ import reducers from './reducers'
 import { fetchTags } from './picturedisplay/actions/tags'
 import { fetchPics } from './picturedisplay/actions/pictures'
 import { fetchMediaSelections } from './picturedisplay/actions/mediaitems'
-import { Map } from 'immutable'
 import demo from './demo'
 
 const loggerMiddleware = createLogger()
-const INITIAL_STATE = Map()
+const INITIAL_STATE = {}
 
 let store = createStore(
   reducers,
@@ -23,7 +22,7 @@ let store = createStore(
   applyMiddleware(thunk)
 )
 
-if(process.env.REACT_APP_DEMO == 'TRUE') demo()
+if(process.env.REACT_APP_DEMO === 'TRUE') demo()
 store.dispatch(fetchTags())
 store.dispatch(fetchPics())
 store.dispatch(fetchMediaSelections())

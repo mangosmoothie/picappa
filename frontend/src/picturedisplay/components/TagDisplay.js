@@ -26,11 +26,11 @@ export default ({ tags, onTagClick, title }) => {
   return (
     <List style={style.list}>
       <Subheader>{title}</Subheader>
-      {tags.map(function (tag) {
+      {Object.values(tags).map(function (tag) {
          return (
-           <Tag key={tag.get("id")}
-             onTagClick={() => onTagClick(tag.get("id"))}
-             name={tag.get("name")} />
+           <Tag key={tag.id}
+             onTagClick={() => onTagClick(tag.id)}
+             name={tag.name} />
          )
        })}
     </List>

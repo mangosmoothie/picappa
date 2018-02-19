@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect'
 
-const showMediaSearchPanel = state =>
-      state.getIn(['controls', 'show-media-search-panel'])
+const showMediaSearchPanel = state => state.controls.showMediaSearchPanel
 
 export const getShowMediaSearchPanel = createSelector(
   [showMediaSearchPanel],
@@ -9,7 +8,7 @@ export const getShowMediaSearchPanel = createSelector(
 )
 
 const mediaViewerDialogUrl = state =>
-      state.getIn(['controls', 'media-viewer-dialog-url'])
+      state.controls.mediaViewerDialogUrl
 
 export const getMediaViewerDialogUrl = createSelector(
   [mediaViewerDialogUrl],
@@ -17,9 +16,23 @@ export const getMediaViewerDialogUrl = createSelector(
 )
 
 const mediaEditorDialogItem = state =>
-      state.getIn(['controls', 'media-editor-dialog-item'])
+      state.controls.mediaEditorDialogItem
 
 export const getMediaEditorDialogItem = createSelector(
   [mediaEditorDialogItem],
   item => item
+)
+
+const startAt = state => state.controls.startAt
+
+export const getStartAt = createSelector(
+  [startAt],
+  d => d
+)
+
+const limit = state => state.controls.limit
+
+export const getLimit = createSelector(
+  [limit],
+  d => d
 )

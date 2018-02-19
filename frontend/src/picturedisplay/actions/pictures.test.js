@@ -2,9 +2,9 @@ import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import moxios from 'moxios'
 import { INITIAL_STATE } from '../reducers/pictures'
+import { INITIAL_STATE as CONTROLS_INITIAL_STATE } from '../reducers/controls'
 import * as cut from './pictures'
 import * as mocks from '../mocks/pictures'
-
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
@@ -39,7 +39,8 @@ describe('async actions', () => {
       { type: cut.ADD_PIC, pic: mocks.newPicJson2 },
       { type: cut.ADD_PIC, pic: mocks.newPicJson3 }
     ]
-    const store = mockStore({tags: [], pictures: INITIAL_STATE})
+    const store = mockStore({tags: [], pictures: INITIAL_STATE,
+                             controls: CONTROLS_INITIAL_STATE})
 
     expect.assertions(1)
     return store.dispatch(cut.fetchPics()).then(() => {
@@ -62,7 +63,8 @@ describe('async actions', () => {
     const expectedActions = [
       { type: cut.REQUEST_PICS }
     ]
-    const store = mockStore({tags: [], pictures: INITIAL_STATE})
+    const store = mockStore({tags: [], pictures: INITIAL_STATE,
+                             controls: CONTROLS_INITIAL_STATE})
 
     expect.assertions(1)
     return store.dispatch(cut.fetchPics()).then(() => {

@@ -58,13 +58,13 @@ export default class MediaSearchPanel extends React.Component {
             <Paper style={this.style.paper} zDepth={2}>
               <FilteredTagDisplay
                 field="selected"
-                predicate={ (x) => !x.get("selected") }
+                predicate={ (x) => !x.selected }
                 title="All Tags"
               />
               <Divider />
               <FilteredTagDisplay
                 field="selected"
-                predicate={ (x) => x.get("selected") }
+                predicate={ (x) => x.selected }
                 title="Selected Tags"
               />
             </Paper>

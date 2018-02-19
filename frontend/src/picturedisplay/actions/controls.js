@@ -39,3 +39,21 @@ export function closeMediaEditorDialog(){
     type: CLOSE_MEDIA_EDITOR_DIALOG
   }
 }
+
+export const UPDATE_STARTAT = 'UPDATE_STARTAT'
+
+export function updateStartAt(startAt){
+  return {
+    type: UPDATE_STARTAT,
+    startAt: startAt
+  }
+}
+
+export const UPDATE_LIMIT = 'UPDATE_LIMIT'
+
+export function updateLimit(limit){
+  return {
+    type: UPDATE_LIMIT,
+    limit: limit
+  }
+}

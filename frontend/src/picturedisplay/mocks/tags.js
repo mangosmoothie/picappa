@@ -1,4 +1,3 @@
-import { Map } from 'immutable'
 import tags, { INITIAL_STATE } from '../reducers/tags'
 import {
   addTag

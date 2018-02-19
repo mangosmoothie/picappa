@@ -1,24 +1,21 @@
-import { Map } from 'immutable'
 import {
   TOGGLE_TAG,
   ADD_TAG
 } from '../actions/tags'
 
-export const INITIAL_STATE = Map()
+export const INITIAL_STATE = {}
 
 export default function(state = INITIAL_STATE, action){
+  let id
   switch (action.type) {
   case TOGGLE_TAG:
-    return state.updateIn(
-      [action.id, action.field],
-      x => !x
-    )
+    id = action.id
+    let newVal = !state[id][action.field]
+    return {...state, [id]: {...state[id], [action.field]: newVal}}
   case ADD_TAG:
+    id = action.tag.id
     const defaults = {selected: false}
-    return state.set(
-      action.tag.id,
-      Map({...defaults, ...action.tag})
-    )
+    return {...state, [id]: {...defaults, ...action.tag}}
   default:
     return state
   }

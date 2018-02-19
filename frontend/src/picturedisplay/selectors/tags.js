@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 
-const tags = state => state.get('tags')
+const tags = state => state.tags
 
 export const getTags = createSelector(
   [tags],
@@ -11,5 +11,7 @@ const predicate = (state, props) => props.predicate
 
 export const makeGetFilteredTags = () => createSelector(
   [getTags, predicate],
-  (tags, predicate) => tags.filter(predicate)
+  (obj, predicate) => Object.keys(obj)
+    .filter( key => predicate(obj[key]) )
+    .reduce( (res, key) => (res[key] = obj[key], res), {} )
 )

@@ -9,12 +9,12 @@ export default ({ showSearchModal, toggleShow }) => {
       <div >
             <FilteredTagDisplay
               field="selected"
-              predicate={ (x) => !x.get("selected") }
+              predicate={ (x) => !x.selected }
               title="All Tags"
             />
             <FilteredTagDisplay
               field="selected"
-              predicate={ (x) => x.get("selected") }
+              predicate={ (x) => x.selected }
               title="Selected Tags"
             />
       </div>

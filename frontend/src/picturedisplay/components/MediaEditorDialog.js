@@ -4,7 +4,6 @@ import TextField from 'material-ui/TextField'
 import {Tabs, Tab} from 'material-ui/Tabs'
 import SelectField from 'material-ui/SelectField'
 import MenuItem from 'material-ui/MenuItem'
-import { Map } from 'immutable'
 import { white, primary, secondary } from '../../colors'
 
 const styles = {
@@ -33,7 +32,7 @@ const styles = {
 }
 
 export default ({ closeDialog, item, mediaTypes, mediaStatuses, updateItem }) => {
-  const current_mi = item ? item : Map()
+  const current_mi = item ? item : {}
 
   return (
     <div>
@@ -47,21 +46,21 @@ export default ({ closeDialog, item, mediaTypes, mediaStatuses, updateItem }) =>
       >
         <div style={styles.container}>
           <div style={styles.centerContainer}>
-            <img src={current_mi.get('thumb_url')} />
+            <img src={current_mi.thumb_url} />
           </div>
           <Tabs >
             <Tab style={styles.tabs} label="Basic">
               <div style={styles.container}>
                 <div style={styles.row}>
                   <TextField
-                    hintText={current_mi.get('name')}
+                    hintText={current_mi.name}
                     floatingLabelText='Name'
                     floatingLabelFixed={true}
                   />
                 </div>
                 <div style={styles.row}>
                   <TextField
-                    hintText={current_mi.get('description')}
+                    hintText={current_mi.description}
                     multiLine={true}
                     floatingLabelText='Description'
                     floatingLabelFixed={true}
@@ -72,12 +71,12 @@ export default ({ closeDialog, item, mediaTypes, mediaStatuses, updateItem }) =>
                     floatingLabelText='Media Type'
                     floatingLabelFixed={true}
                     onChange={ (e, i, v) => updateItem(current_mi.set('media_type_cd', v))}
-                    value={ current_mi.get('media_type_cd') }
+                    value={ current_mi.media_type_cd }
                   >
-                    {mediaTypes.valueSeq().map(x =>
-                      <MenuItem key={x.get('media_type_cd')}
-                        value={x.get('media_type_cd')}
-                        primaryText={x.get('name')} />
+                    {Object.values(mediaTypes).map(x =>
+                      <MenuItem key={x.media_type_cd}
+                        value={x.media_type_cd}
+                        primaryText={x.name} />
                     )}
                   </SelectField>
                 </div>
@@ -86,12 +85,12 @@ export default ({ closeDialog, item, mediaTypes, mediaStatuses, updateItem }) =>
                     floatingLabelText='Status'
                     floatingLabelFixed={true}
                     onChange={ (e, i, v) => updateItem(current_mi.set('status_cd', v)) }
-                    value={current_mi.get('status_cd')}
+                    value={current_mi.status_cd}
                   >
-                    {mediaStatuses.valueSeq().map(x =>
-                      <MenuItem key={x.get('status_cd')}
-                        value={x.get('status_cd')}
-                        primaryText={x.get('name')} />
+                    {Object.values(mediaStatuses).map(x =>
+                      <MenuItem key={x.status_cd}
+                        value={x.status_cd}
+                        primaryText={x.name} />
                     )}
                   </SelectField>
                 </div>
@@ -101,13 +100,13 @@ export default ({ closeDialog, item, mediaTypes, mediaStatuses, updateItem }) =>
               <div style={styles.container}>
                 <div style={styles.row}>
                   <TextField
-                    hintText={current_mi.get('original_filename')}
+                    hintText={current_mi.original_filename}
                     disabled={true}
                     floatingLabelText='Original Filename'
                     floatingLabelFixed={true}
                   />
                   <TextField
-                    hintText={current_mi.get('origin_date')}
+                    hintText={current_mi.origin_date}
                     disabled={true}
                     floatingLabelText='Origin Date'
                     floatingLabelFixed={true}
@@ -115,13 +114,13 @@ export default ({ closeDialog, item, mediaTypes, mediaStatuses, updateItem }) =>
                 </div>
                 <div style={styles.row}>
                   <TextField
-                    hintText={current_mi.get('added_date')}
+                    hintText={current_mi.added_date}
                     disabled={true}
                     floatingLabelText='Added Date'
                     floatingLabelFixed={true}
                   />
                   <TextField
-                    hintText={current_mi.get('modified_date')}
+                    hintText={current_mi.modified_date}
                     disabled={true}
                     floatingLabelText='Modified Date'
                     floatingLabelFixed={true}
@@ -129,7 +128,7 @@ export default ({ closeDialog, item, mediaTypes, mediaStatuses, updateItem }) =>
                 </div>
                 <div style={styles.row}>
                   <TextField
-                    hintText={current_mi.get('file_size')}
+                    hintText={current_mi.file_size}
                     disabled={true}
                     floatingLabelText='File Size'
                     floatingLabelFixed={true}

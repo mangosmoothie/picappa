@@ -8,7 +8,7 @@ import {
 
 const mapStateToProps = (state) => {
   return {
-    pictures: getPictures(state).valueSeq()
+    pictures: Object.values(getPictures(state))
   }
 }
 

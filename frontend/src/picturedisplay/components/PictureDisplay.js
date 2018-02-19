@@ -28,11 +28,11 @@ export default ( { pictures,
         <MediaViewerDialog />
         <MediaEditorDialog />
         {pictures.map( (p) => {
-           const onClickPic = () => setMediaViewerDialogUrl(p.get('url'))
+           const onClickPic = () => setMediaViewerDialogUrl(p.url)
            const onClickEdit = () => setMediaEditorDialogItem(p)
            return (
-             <div key={p.get('id')}  className="container" >
-               <Picture url={p.get('thumb_url')} onClick={onClickPic} />
+             <div key={p.id}  className="container" >
+               <Picture url={p.thumb_url} onClick={onClickPic} />
                <div className="overlay">
                  <IconButton onClick={onClickEdit}>
                    <ImageEdit color={white} />
