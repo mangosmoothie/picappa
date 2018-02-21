@@ -1,12 +1,14 @@
 import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
+import { applyMiddleware, compose } from 'redux'
+import createSagaMiddleware from 'redux-saga'
 import moxios from 'moxios'
 import { INITIAL_STATE } from '../reducers/tags'
 import * as cut from './tags'
 import * as mocks from '../mocks/tags'
+import { watchRequestTags } from '../sagas/tags'
 
-const middlewares = [thunk]
-const mockStore = configureMockStore(middlewares)
+const sagaMiddleware = createSagaMiddleware()
+const mockStore = configureMockStore(compose(applyMiddleware(sagaMiddleware)))
 
 describe('async actions', () => {
   beforeEach(() => {
@@ -17,7 +19,7 @@ describe('async actions', () => {
     moxios.uninstall()
   })
 
-  it('fetch tags', () => {
+  it('request tags', () => {
 
     moxios.wait(() => {
       const request = moxios.requests.mostRecent()
@@ -40,12 +42,11 @@ describe('async actions', () => {
     const store = mockStore({tags: INITIAL_STATE})
 
     expect.assertions(1)
-    return store.dispatch(cut.fetchTags()).then(() => {
-      expect(store.getActions()).toEqual(expectedActions)
-    })
+    store.dispatch(cut.requestTags())
+    expect(store.getActions()).toEqual(expectedActions)
   })
 
-  it('fetch tags - empty', () => {
+  it('request tags - empty', () => {
 
     moxios.wait(() => {
       const request = moxios.requests.mostRecent()
@@ -63,7 +64,7 @@ describe('async actions', () => {
     const store = mockStore({tags: INITIAL_STATE})
 
     expect.assertions(1)
-    return store.dispatch(cut.fetchTags()).then(() => {
+    return store.dispatch(cut.requestTags()).then(() => {
       expect(store.getActions()).toEqual(expectedActions)
     })
   })

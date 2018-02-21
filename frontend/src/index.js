@@ -8,7 +8,7 @@ import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker'
 import reducers from './reducers'
-import { fetchTags } from './picturedisplay/actions/tags'
+import { requestTags } from './picturedisplay/actions/tags'
 import { fetchPics } from './picturedisplay/actions/pictures'
 import { fetchMediaSelections } from './picturedisplay/actions/mediaitems'
 import demo from './demo'
@@ -23,7 +23,7 @@ let store = createStore(
 )
 
 if(process.env.REACT_APP_DEMO === 'TRUE') demo()
-store.dispatch(fetchTags())
+store.dispatch(requestTags())
 store.dispatch(fetchPics())
 store.dispatch(fetchMediaSelections())
 
