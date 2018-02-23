@@ -10,7 +10,7 @@ function* fetchTags() {
     yield all(tags.map(t => put(addTag(t))))
   } catch (e) {
     console.error(e)
-    yield put({type: 'USER_FETCH_FAILED', message: e.message})
+    yield put({type: 'REQUEST_TAGS_FAILED', message: e.message})
   }
 }
 

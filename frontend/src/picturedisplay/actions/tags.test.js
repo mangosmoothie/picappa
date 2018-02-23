@@ -1,5 +1,5 @@
 import configureMockStore from 'redux-mock-store'
-import { applyMiddleware, compose } from 'redux'
+import { applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import moxios from 'moxios'
 import { INITIAL_STATE } from '../reducers/tags'
@@ -8,7 +8,7 @@ import * as mocks from '../mocks/tags'
 import { watchRequestTags } from '../sagas/tags'
 
 const sagaMiddleware = createSagaMiddleware()
-const mockStore = configureMockStore(compose(applyMiddleware(sagaMiddleware)))
+const mockStore = configureMockStore([sagaMiddleware])
 
 describe('async actions', () => {
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('async actions', () => {
     moxios.uninstall()
   })
 
-  it('request tags', () => {
+  it('request tags', (done) => {
 
     moxios.wait(() => {
       const request = moxios.requests.mostRecent()
@@ -40,13 +40,20 @@ describe('async actions', () => {
       { type: cut.ADD_TAG, tag: mocks.newTagJson2 }
     ]
     const store = mockStore({tags: INITIAL_STATE})
+    sagaMiddleware.run(watchRequestTags)
 
     expect.assertions(1)
+    store.subscribe(() => {
+      const actions = store.getActions()
+      if (actions.length >= expectedActions.length){
+        expect(actions).toEqual(expectedActions)
+        done()
+      }
+    })
     store.dispatch(cut.requestTags())
-    expect(store.getActions()).toEqual(expectedActions)
   })
 
-  it('request tags - empty', () => {
+  it('request tags - empty', (done) => {
 
     moxios.wait(() => {
       const request = moxios.requests.mostRecent()
@@ -62,11 +69,17 @@ describe('async actions', () => {
       { type: cut.REQUEST_TAGS }
     ]
     const store = mockStore({tags: INITIAL_STATE})
+    sagaMiddleware.run(watchRequestTags)
 
     expect.assertions(1)
-    return store.dispatch(cut.requestTags()).then(() => {
-      expect(store.getActions()).toEqual(expectedActions)
-    })
+    store.subscribe(() => {
+      const actions = store.getActions();
+      if (actions.length >= expectedActions.length){
+        expect(actions).toEqual(expectedActions);
+        done();
+      }
+    });
+    store.dispatch(cut.requestTags())
   })
 
 })

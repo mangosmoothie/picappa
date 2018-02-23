@@ -1,13 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import thunk from 'redux-thunk';
 import App from './App';
 import configureMockStore from 'redux-mock-store'
 import { Provider } from 'react-redux'
 import { INITIAL_STATE } from './picturedisplay/reducers/mediaitems'
 
-const middlewares = [thunk]
-const mockStore = configureMockStore(middlewares)
+const mockStore = configureMockStore()
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
