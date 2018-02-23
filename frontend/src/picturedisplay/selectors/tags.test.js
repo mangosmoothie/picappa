@@ -9,7 +9,7 @@ it('get tags', () => {
 it('get filtered tags', () => {
   const getFilteredTags = cut.makeGetFilteredTags()
   const tags = getFilteredTags(stateWithTags, {predicate: x => !x.selected})
-  expect(Object.keys(tags).length).toEqual(1)
+  expect(tags.length).toEqual(1)
 
   const otherTags = getFilteredTags(stateWithTags, {predicate: x => x.selected})
   expect(Object.keys(otherTags).length).toEqual(1)

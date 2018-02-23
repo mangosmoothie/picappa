@@ -1,5 +1,3 @@
-import axios from 'axios'
-
 export const TOGGLE_TAG = 'TOGGLE_TAG'
 
 export function toggleTagField(tagId, field){
@@ -18,17 +16,8 @@ export function addTag(tag){
 
 export const REQUEST_TAGS = 'REQUEST_TAGS'
 
-function requestTags(){
+export function requestTags(){
   return {
     type: REQUEST_TAGS
-  }
-}
-
-export function fetchTags(){
-  return dispatch => {
-    dispatch(requestTags())
-    return axios.get('/api/all-tags')
-      .then( ({data}) => data['tags'].map(t => dispatch(addTag(t))),
-             (err) => console.error(err) )
   }
 }

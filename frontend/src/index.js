@@ -2,30 +2,39 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker'
 import reducers from './reducers'
-import { fetchTags } from './picturedisplay/actions/tags'
-import { fetchPics } from './picturedisplay/actions/pictures'
-import { fetchMediaSelections } from './picturedisplay/actions/mediaitems'
+import { requestTags } from './picturedisplay/actions/tags'
+import { requestPics } from './picturedisplay/actions/pictures'
+import { requestMediaSelections } from './picturedisplay/actions/mediaitems'
+import createSagaMiddleware from 'redux-saga'
 import demo from './demo'
+import { watchRequestTags } from './picturedisplay/sagas/tags'
+import { watchRequestPics } from './picturedisplay/sagas/pictures'
+import { watchRequestSelections } from './picturedisplay/sagas/mediaitems'
 
 const loggerMiddleware = createLogger()
 const INITIAL_STATE = {}
 
+const sagaMiddleware = createSagaMiddleware()
+
 let store = createStore(
   reducers,
   INITIAL_STATE,
-  applyMiddleware(thunk)
+  applyMiddleware(sagaMiddleware)
 )
 
+sagaMiddleware.run(watchRequestTags)
+sagaMiddleware.run(watchRequestPics)
+sagaMiddleware.run(watchRequestSelections)
+
 if(process.env.REACT_APP_DEMO === 'TRUE') demo()
-store.dispatch(fetchTags())
-store.dispatch(fetchPics())
-store.dispatch(fetchMediaSelections())
+store.dispatch(requestTags())
+store.dispatch(requestPics())
+store.dispatch(requestMediaSelections())
 
 ReactDOM.render(
   <Provider store={store}>

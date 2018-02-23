@@ -1,12 +1,14 @@
 import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
+import { applyMiddleware } from 'redux'
+import createSagaMiddleware from 'redux-saga'
 import moxios from 'moxios'
 import { INITIAL_STATE } from '../reducers/mediaitems'
 import * as cut from './mediaitems'
 import * as mocks from '../mocks/mediaitems'
+import { watchRequestSelections } from '../sagas/mediaitems'
 
-const middlewares = [thunk]
-const mockStore = configureMockStore(middlewares)
+const sagaMiddleware = createSagaMiddleware()
+const mockStore = configureMockStore([sagaMiddleware])
 
 describe('async actions', () => {
   beforeEach(() => {
@@ -17,7 +19,7 @@ describe('async actions', () => {
     moxios.uninstall()
   })
 
-  it('fetch media selections', () => {
+  it('fetch media selections', (done) => {
 
     moxios.wait(() => {
       const request = moxios.requests.mostRecent()
@@ -38,14 +40,20 @@ describe('async actions', () => {
       { type: cut.ADD_MEDIA_TYPE_OPTION, data: mocks.newTypeOption2}
     ]
     const store = mockStore({mediaitems: INITIAL_STATE})
+    sagaMiddleware.run(watchRequestSelections)
 
     expect.assertions(1)
-    return store.dispatch(cut.fetchMediaSelections()).then(() => {
-      expect(store.getActions()).toEqual(expectedActions)
+    store.subscribe(() => {
+      const actions = store.getActions()
+      if (actions.length >= expectedActions.length){
+        expect(actions).toEqual(expectedActions)
+        done()
+      }
     })
+    store.dispatch(cut.requestMediaSelections())
   })
 
-  it('fetch selections - empty', () => {
+  it('fetch selections - empty', (done) => {
 
     moxios.wait(() => {
       const request = moxios.requests.mostRecent()
@@ -62,11 +70,17 @@ describe('async actions', () => {
       { type: cut.REQUEST_MEDIA_SELECTIONS }
     ]
     const store = mockStore({mediaitems: INITIAL_STATE})
+    sagaMiddleware.run(watchRequestSelections)
 
     expect.assertions(1)
-    return store.dispatch(cut.fetchMediaSelections()).then(() => {
-      expect(store.getActions()).toEqual(expectedActions)
+    store.subscribe(() => {
+      const actions = store.getActions()
+      if (actions.length >= expectedActions.length){
+        expect(actions).toEqual(expectedActions)
+        done()
+      }
     })
+    store.dispatch(cut.requestMediaSelections())
   })
 
 })
