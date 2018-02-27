@@ -15,6 +15,6 @@ function* fetchMediaSelections() {
   }
 }
 
-export function* watchRequestSelections(){
-  yield takeEvery('REQUEST_MEDIA_SELECTIONS', fetchMediaSelections)
-}
+export default [
+  takeEvery('REQUEST_MEDIA_SELECTIONS', fetchMediaSelections)
+]

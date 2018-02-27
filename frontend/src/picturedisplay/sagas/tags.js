@@ -14,6 +14,7 @@ function* fetchTags() {
   }
 }
 
-export function* watchRequestTags(){
-  yield takeEvery('REQUEST_TAGS', fetchTags)
-}
+export default [
+  takeEvery('REQUEST_TAGS', fetchTags)
+]
+

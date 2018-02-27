@@ -20,7 +20,6 @@ function* fetchPics() {
     const limit = yield select(getLimit)
     const getFilteredTags = makeGetFilteredTags()
     const tags = yield select(getFilteredTags, {predicate: x => x.selected})
-    console.log(tags)
     const pics = yield call(getPics, startAt, limit, tags)
     yield all(pics.map(p => put(addPic(p))))
   } catch (e) {
@@ -29,6 +28,7 @@ function* fetchPics() {
   }
 }
 
-export function* watchRequestPics(){
-  yield takeEvery('REQUEST_PICS', fetchPics)
-}
+export default [
+  takeEvery('REQUEST_PICS', fetchPics)
+]
+

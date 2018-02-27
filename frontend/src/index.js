@@ -12,9 +12,7 @@ import { requestPics } from './picturedisplay/actions/pictures'
 import { requestMediaSelections } from './picturedisplay/actions/mediaitems'
 import createSagaMiddleware from 'redux-saga'
 import demo from './demo'
-import { watchRequestTags } from './picturedisplay/sagas/tags'
-import { watchRequestPics } from './picturedisplay/sagas/pictures'
-import { watchRequestSelections } from './picturedisplay/sagas/mediaitems'
+import sagas from './sagas'
 
 const loggerMiddleware = createLogger()
 const INITIAL_STATE = {}
@@ -27,9 +25,7 @@ let store = createStore(
   applyMiddleware(sagaMiddleware)
 )
 
-sagaMiddleware.run(watchRequestTags)
-sagaMiddleware.run(watchRequestPics)
-sagaMiddleware.run(watchRequestSelections)
+sagaMiddleware.run(sagas)
 
 if(process.env.REACT_APP_DEMO === 'TRUE') demo()
 store.dispatch(requestTags())
