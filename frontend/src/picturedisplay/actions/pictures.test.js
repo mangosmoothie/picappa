@@ -6,10 +6,14 @@ import { INITIAL_STATE } from '../reducers/pictures'
 import { INITIAL_STATE as CONTROLS_INITIAL_STATE } from '../reducers/controls'
 import * as cut from './pictures'
 import * as mocks from '../mocks/pictures'
-import { watchRequestPics } from '../sagas/pictures'
+import { default as sagas } from '../sagas/pictures'
 
 const sagaMiddleware = createSagaMiddleware()
 const mockStore = configureMockStore([sagaMiddleware])
+
+function* watchRequestPics() {
+  yield sagas[0]
+}
 
 describe('async actions', () => {
   beforeEach(() => {

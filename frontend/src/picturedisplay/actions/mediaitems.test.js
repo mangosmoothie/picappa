@@ -5,10 +5,14 @@ import moxios from 'moxios'
 import { INITIAL_STATE } from '../reducers/mediaitems'
 import * as cut from './mediaitems'
 import * as mocks from '../mocks/mediaitems'
-import { watchRequestSelections } from '../sagas/mediaitems'
+import { default as sagas } from '../sagas/mediaitems'
 
 const sagaMiddleware = createSagaMiddleware()
 const mockStore = configureMockStore([sagaMiddleware])
+
+function* watchRequestSelections() {
+  yield sagas[0];
+}
 
 describe('async actions', () => {
   beforeEach(() => {
